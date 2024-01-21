@@ -13,13 +13,11 @@ return new class extends Migration
     {
         Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->String("name",15);
-            $table->String("Description",125);
-            $table->String("Category",20);
-
+            $table->string("name", 15);
+            $table->string("description", 125);
+            $table->unsignedBigInteger("category_id"); // Cambiado a unsignedBigInteger
 
             $table->foreign('category_id')->references('id')->on('categories');
-
         });
     }
 

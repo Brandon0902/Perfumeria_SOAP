@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->String("companyname");
             $table->Integer("phone");
-        });
+        });  // <- Agrega el cierre de la función create para 'shippers'
+
     }
 
     /**
@@ -24,5 +25,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('shippers');
+
     }
 };
