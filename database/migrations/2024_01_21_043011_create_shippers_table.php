@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
-        });
+        Schema::create('shippers', function (Blueprint $table) {
+            $table->id();
+            $table->String("companyname");
+            $table->Integer("phone");
+        });  // <- Agrega el cierre de la función create para 'shippers'
+
     }
 
     /**
@@ -23,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('shippers');
+
     }
 };
