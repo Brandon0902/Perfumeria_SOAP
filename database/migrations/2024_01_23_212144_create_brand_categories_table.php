@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('brand_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('brandId ');
+            $table->unsignedBigInteger('brandId');
             $table->unsignedBigInteger('categoryId');
             $table->timestamps();
         
-            $table->foreign('brandId ')->references('id')->on('brands')->onDelete('cascade');
+            $table->foreign('brandId')->references('id')->on('brands')->onDelete('cascade');
             $table->foreign('categoryId')->references('id')->on('categories')->onDelete('cascade');
         
-            $table->unique(['brandId ', 'categoryId']); // Para asegurar la unicidad de las relaciones.
+            $table->unique(['brandId', 'categoryId']); // Para asegurar la unicidad de las relaciones.
         });
     }
 

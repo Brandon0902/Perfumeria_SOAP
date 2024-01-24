@@ -29,7 +29,7 @@ return new class extends Migration
     
             
             $table->foreign('customerId')->references('id')->on('customers');
-            $table->foreign('productsId')->references('id')->on('products');
+            $table->foreign('productId')->references('id')->on('products');
             $table->foreign('shipVia')->references('id')->on('shippers');
 
 
