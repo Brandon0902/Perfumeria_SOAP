@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("customerId");
-            $table->unsignedBigInteger("brandId");
+            $table->unsignedBigInteger("productId");
             $table->date("orderDate");
             $table->date("requireDate");
             $table->date("shippedDate")->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
     
             
             $table->foreign('customerId')->references('id')->on('customers');
-            $table->foreign('brandId')->references('id')->on('brands');
+            $table->foreign('productsId')->references('id')->on('products');
             $table->foreign('shipVia')->references('id')->on('shippers');
 
 

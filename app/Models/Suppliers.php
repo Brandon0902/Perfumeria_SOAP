@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Suppliers extends Model
 {
     use HasFactory;
+    public function products():belongsTo{
+        return $this->belongsTo(Products::class);
+    }
 }

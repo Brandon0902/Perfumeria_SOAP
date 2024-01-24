@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Shippers extends Model
 {
     use HasFactory;
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Products::class);
+    }
 }
