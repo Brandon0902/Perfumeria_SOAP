@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->string("addres");
+            $table->string("address")->nullable();
             $table->string("phone");
-            $table->integer("creditcard");
+            $table->string("creditcard");
         });
     }
 
