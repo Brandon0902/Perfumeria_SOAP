@@ -17,20 +17,20 @@
            
           
               <div class="mb-4">
-                  <label for="productName" class="block text-sm font-medium text-white">Product Name</label>
+                  <label for="productName" class="block text-sm font-medium text-white">Nombre de producto</label>
                   <input type="text" name="productName" id="productName" class="mt-1 p-2 border rounded-md w-full" required>
               </div>
           
               <div class="grid grid-cols-2 gap-4">
                   <div class="mb-4">
-                      <label for="supplierId" class="block text-sm font-medium text-white">Supplier</label>
+                      <label for="supplierId" class="block text-sm font-medium text-white">Proveedor</label>
                       <select name="supplierId" id="supplierId" class="mt-1 p-2 border rounded-md w-full" required>
                           <!-- Opciones del proveedor -->
                       </select>
                   </div>
           
                   <div class="mb-4">
-                      <label for="categoryId" class="block text-sm font-medium text-white">Category</label>
+                      <label for="categoryId" class="block text-sm font-medium text-white">Categoria</label>
                       <select name="categoryId" id="categoryId" class="mt-1 p-2 border rounded-md w-full" required>
                           <!-- Opciones de categoría -->
                       </select>
@@ -38,41 +38,42 @@
               </div>
           
               <div class="grid grid-cols-3 gap-4">
-                  <div class="mb-4">
-                      <label for="quantityPerUnit" class="block text-sm font-medium text-white">Quantity Per Unit</label>
-                      <input type="text" name="quantityPerUnit" id="quantityPerUnit" class="mt-1 p-2 border rounded-md w-full" required>
-                  </div>
-          
-                  <div class="mb-4">
-                      <label for="unitPrice" class="block text-sm font-medium text-white">Unit Price</label>
-                      <input type="text" name="unitPrice" id="unitPrice" class="mt-1 p-2 border rounded-md w-full" required>
-                  </div>
-          
-                  <div class="mb-4">
-                      <label for="unitsInStock" class="block text-sm font-medium text-white">Units In Stock</label>
-                      <input type="text" name="unitsInStock" id="unitsInStock" class="mt-1 p-2 border rounded-md w-full" required>
-                  </div>
-              </div>
-          
-              <div class="grid grid-cols-3 gap-4">
-                  <div class="mb-4">
-                      <label for="unitsOnOrder" class="block text-sm font-medium text-white">Units On Order</label>
-                      <input type="text" name="unitsOnOrder" id="unitsOnOrder" class="mt-1 p-2 border rounded-md w-full" required>
-                  </div>
-          
-                  <div class="mb-4">
-                      <label for="reoderLevel" class="block text-sm font-medium text-white">Reorder Level</label>
-                      <input type="text" name="reoderLevel" id="reoderLevel" class="mt-1 p-2 border rounded-md w-full" required>
-                  </div>
-          
-                  <div class="mb-4">
-                      <label for="discontinued" class="block text-sm font-medium text-white">Discontinued</label>
-                      <select name="discontinued" id="discontinued" class="mt-1 p-2 border rounded-md w-full" required>
-                          <option value="0">No</option>
-                          <option value="1">Yes</option>
-                      </select>
-                  </div>
-              </div>
+                <div class="mb-4">
+                    <label for="quantityPerUnit" class="block text-sm font-medium text-white">Cantidad por Unidad</label>
+                    <input type="text" name="quantityPerUnit" id="quantityPerUnit" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            
+                <div class="mb-4">
+                    <label for="unitPrice" class="block text-sm font-medium text-white">Precio Unitario</label>
+                    <input type="text" name="unitPrice" id="unitPrice" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            
+                <div class="mb-4">
+                    <label for="unitsInStock" class="block text-sm font-medium text-white">Unidades en Stock</label>
+                    <input type="text" name="unitsInStock" id="unitsInStock" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4">
+                <div class="mb-4">
+                    <label for="unitsOnOrder" class="block text-sm font-medium text-white">Unidades en Pedido</label>
+                    <input type="text" name="unitsOnOrder" id="unitsOnOrder" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            
+                <div class="mb-4">
+                    <label for="reoderLevel" class="block text-sm font-medium text-white">Nivel de Reorden</label>
+                    <input type="text" name="reoderLevel" id="reoderLevel" class="mt-1 p-2 border rounded-md w-full" required>
+                </div>
+            
+                <div class="mb-4">
+                    <label for="discontinued" class="block text-sm font-medium text-white">Descontinuado</label>
+                    <select name="discontinued" id="discontinued" class="mt-1 p-2 border rounded-md w-full" required>
+                        <option value="0">No</option>
+                        <option value="1">Sí</option>
+                    </select>
+                </div>
+            </div>
+            
           
               <div class="mb-4">
                   <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Guardar Producto</button>

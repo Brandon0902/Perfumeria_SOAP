@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/brands', '/administrador/brands/create')->name('brands');
     Route::view('/Shippers', '/administrador/shippers/create')->name('shippers');
     Route::view('/categorias', '/administrador/categorias/create')->name('categories');
+    Route::view('/suppliers','/administrador/suppliers/create')->name('suppliers');
 });
 
 //Route::view('/inicio','/administrador/inicio/inicio');
