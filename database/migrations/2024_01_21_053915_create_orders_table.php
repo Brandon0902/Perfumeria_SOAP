@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string("shipCountry");
     
             
+
             $table->foreign('userId')->references('id')->on('users');
             $table->foreign('productId')->references('id')->on('products');
             $table->foreign('shipVia')->references('id')->on('shippers');
