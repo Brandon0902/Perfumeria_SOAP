@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/products', '/administrador/products/create')->name('products');
     Route::view('/brands', '/administrador/brands/create')->name('brands');
     Route::view('/Shippers', '/administrador/shippers/create')->name('shippers');
-    Route::view('/categorias', '/administrador/categorias/create')->name('categorias');
+    Route::view('/categorias', '/administrador/categorias/create')->name('categories');
 });
 
 //Route::view('/inicio','/administrador/inicio/inicio');
