@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("userId");
             $table->unsignedBigInteger("productId");
+            $table->unsignedBigInteger("customerId");
+            $table->unsignedBigInteger("brandId");
             $table->date("orderDate");
             $table->date("requireDate");
             $table->date("shippedDate")->nullable();
