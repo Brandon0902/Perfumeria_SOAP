@@ -26,6 +26,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::view('/Shippers', '/administrador/shippers/create')->name('shippers');
+    Route::view('/categorias', '/administrador/categorias/create')->name('categorias');
 });
 
 require __DIR__.'/auth.php';
+
