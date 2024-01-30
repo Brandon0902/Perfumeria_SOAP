@@ -59,6 +59,36 @@
         <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
       </div>
     </form>
-        </div>
+        <h2 class="text-xl font-bold mb-4 text-white">Lista de Transportistas</h2>
+
+    <div class="bg-gray-800 text-white rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-700">
+            <thead class="bg-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la Empresa</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Teléfono</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-700">
+                <!-- Filas de datos simulados -->
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">1</td>
+                    <td class="px-6 py-4 whitespace-nowrap">Fedex</td>
+                    <td class="px-6 py-4 whitespace-nowrap">123456789</td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">2</td>
+                    <td class="px-6 py-4 whitespace-nowrap">DHL</td>
+                    <td class="px-6 py-4 whitespace-nowrap">987654321</td>
+                </tr>
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">3</td>
+                    <td class="px-6 py-4 whitespace-nowrap">AMPM</td>
+                    <td class="px-6 py-4 whitespace-nowrap">555555555</td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
     </div>
 </x-app-layout>

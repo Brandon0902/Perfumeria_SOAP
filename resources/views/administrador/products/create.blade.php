@@ -70,7 +70,7 @@
                     <select name="discontinued" id="discontinued" class="mt-1 p-2 border rounded-md w-full" required>
                         <option value="0">No</option>
                         <option value="1">Sí</option>
-                    </select>
+                    </select
                 </div>
             </div>
             
@@ -79,10 +79,64 @@
                   <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Guardar Producto</button>
               </div>
           </form>
-          
-          
-          
-  
         </div>
+        <h2 class="text-xl font-bold mb-4 text-white">Lista de Productos</h2>
+
+<div class="bg-gray-800 text-white rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-700">
+        <thead class="bg-gray-700">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre del Producto</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID del Proveedor</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID de la Categoría</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Cantidad por Unidad</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Precio Unitario</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unidades en Stock</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unidades en Pedido</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nivel de Reorden</th>
+                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descontinuado</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-700">
+            <!-- Filas de datos simulados -->
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">1</td>
+                <td class="px-6 py-4 whitespace-nowrap">Lavanda</td>
+                <td class="px-6 py-4 whitespace-nowrap">1</td>
+                <td class="px-6 py-4 whitespace-nowrap">1</td>
+                <td class="px-6 py-4 whitespace-nowrap">10 unidades</td>
+                <td class="px-6 py-4 whitespace-nowrap">$25.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">100</td>
+                <td class="px-6 py-4 whitespace-nowrap">20</td>
+                <td class="px-6 py-4 whitespace-nowrap">10</td>
+                <td class="px-6 py-4 whitespace-nowrap">No</td>
+            </tr>
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">2</td>
+                <td class="px-6 py-4 whitespace-nowrap">Play Boy</td>
+                <td class="px-6 py-4 whitespace-nowrap">2</td>
+                <td class="px-6 py-4 whitespace-nowrap">2</td>
+                <td class="px-6 py-4 whitespace-nowrap">15 unidades</td>
+                <td class="px-6 py-4 whitespace-nowrap">$30.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">80</td>
+                <td class="px-6 py-4 whitespace-nowrap">15</td>
+                <td class="px-6 py-4 whitespace-nowrap">15</td>
+                <td class="px-6 py-4 whitespace-nowrap">No</td>
+            </tr>
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">3</td>
+                <td class="px-6 py-4 whitespace-nowrap">Dolche Ghabana</td>
+                <td class="px-6 py-4 whitespace-nowrap">3</td>
+                <td class="px-6 py-4 whitespace-nowrap">3</td>
+                <td class="px-6 py-4 whitespace-nowrap">20 unidades</td>
+                <td class="px-6 py-4 whitespace-nowrap">$40.00</td>
+                <td class="px-6 py-4 whitespace-nowrap">120</td>
+                <td class="px-6 py-4 whitespace-nowrap">25</td>
+                <td class="px-6 py-4 whitespace-nowrap">8</td>
+                <td class="px-6 py-4 whitespace-nowrap">No</td>
+            </tr>
+        </tbody>
+    </table>
     </div>
 </x-app-layout>
