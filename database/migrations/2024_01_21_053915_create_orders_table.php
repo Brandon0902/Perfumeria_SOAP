@@ -29,6 +29,8 @@ return new class extends Migration
             $table->string("shipPostalCode");
             $table->string("shipCountry");
     
+            $table->timestamps();
+
             
 
             $table->foreign('userId')->references('id')->on('users');

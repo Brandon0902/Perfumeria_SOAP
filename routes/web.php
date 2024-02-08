@@ -32,19 +32,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Rutas para Productos
-    Route::get('/productos', [ProductsController::class, 'index'])->name('products.index');
-    Route::get('/productos/create', [ProductsController::class, 'create'])->name('products.create');
-    Route::post('/productos', [ProductsController::class, 'store'])->name('products.store');
-    Route::get('/productos/{producto}/edit', [ProductsController::class, 'edit'])->name('products.edit');
-    Route::patch('/productos/{producto}', [ProductsController::class, 'update'])->name('products.update');
+    // Rutas para articulos
+    Route::get('/articulos', [ProductsController::class, 'index'])->name('products.index');
+    Route::get('/articulos/create', [ProductsController::class, 'create'])->name('products.create');
+    Route::post('/articulos',[ProductsController::class, 'store'])->name('products.store');
+    Route::get('/articulos/{producto}/edit', [ProductsController::class, 'edit'])->name('products.edit');
+    Route::patch('/articulos/{producto}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/articulos/{producto}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     // Rutas para Marcas
-    Route::get('/marcas', [BrandController::class, 'index'])->name('brand.index');
-    Route::get('/marcas/create', [BrandController::class, 'create'])->name('brand.create');
-    Route::post('/marcas', [BrandController::class, 'store'])->name('brand.store');
-    Route::get('/marcas/{marca}/edit', [BrandController::class, 'edit'])->name('brand.edit');
-    Route::patch('/marcas/{marca}', [BrandController::class, 'update'])->name('brand.update');
+    Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
+    Route::get('/marcas/create', [BrandController::class, 'create'])->name('brands.create');
+    Route::post('/marcas', [BrandController::class, 'store'])->name('brands.store');
+    Route::get('/marcas/{brand}/edit', [BrandController::class, 'edit'])->name('brands.edit');
+    Route::patch('/marcas/{brand}', [BrandController::class, 'update'])->name('brands.update');
+    Route::delete('/marcas/{brand}', [BrandController::class, 'destroy'])->name('brands.destroy');
 
     // Rutas para Transportistas
     Route::get('/transportistas', [ShippersController::class, 'index'])->name('shippers.index');
@@ -52,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/transportistas', [ShippersController::class, 'store'])->name('shippers.store');
     Route::get('/transportistas/{transportista}/edit', [ShippersController::class, 'edit'])->name('shippers.edit');
     Route::patch('/transportistas/{transportista}', [ShippersController::class, 'update'])->name('shippers.update');
+    Route::delete('/transportista/{transportista}', [ShippersController::class, 'destroy'])->name('shippers.destroy');
 
     // Rutas para Categorías
     Route::get('/categorias', [CategoriesController::class, 'index'])->name('categories.index');
@@ -59,6 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/categorias', [CategoriesController::class, 'store'])->name('categories.store');
     Route::get('/categorias/{categoria}/edit', [CategoriesController::class, 'edit'])->name('categories.edit');
     Route::patch('/categorias/{categoria}', [CategoriesController::class, 'update'])->name('categories.update');
+    Route::delete('/categorias/{categoria}', [CategoriesController::class, 'destroy'])->name('categories.destroy');
 
     // Rutas para Proveedores
     Route::get('/proveedores', [SuppliersController::class, 'index'])->name('suppliers.index');

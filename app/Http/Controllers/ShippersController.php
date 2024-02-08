@@ -10,24 +10,22 @@ class ShippersController extends Controller
     public function index()
     {
         $shippers = Shippers::all();
-        return view('shippers.index', compact('shippers'));
+        return view('administrador.shippers.index', compact('shippers'));
     }
 
     public function create()
     {
-        return view('shippers.create');
+        return view('administrador.shippers.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer',
             'companyname' => 'required|string|max:255',
             'phone' => 'required|string',
         ]);
 
         $transportista = new Shippers([
-            'id' => $request->input('id'),
             'companyname' => $request->input('companyname'),
             'phone' => $request->input('phone'),
         ]);
@@ -44,19 +42,17 @@ class ShippersController extends Controller
 
     public function edit(Shippers $transportista)
     {
-        return view('shippers.edit', compact('transportista'));
+        return view('administrador.shippers.edit', compact('transportista'));
     }
 
     public function update(Request $request, Shippers $transportista)
     {
         $request->validate([
-            'id' => 'required|integer',
             'companyname' => 'required|string|max:255',
             'phone' => 'required|string',
         ]);
 
         $transportista->update([
-            'id' => $request->input('id'),
             'companyname' => $request->input('companyname'),
             'phone' => $request->input('phone'),
         ]);

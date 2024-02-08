@@ -10,12 +10,12 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
-        return view('brands.index', compact('brands'));
+        return view('administrador.brands.index', compact('brands'));
     }
 
     public function create()
     {
-        return view('brands.create');
+        return view('administrador.brands.create');
     }
 
     public function store(Request $request)
@@ -25,34 +25,34 @@ class BrandController extends Controller
             'description' => 'required|string',
         ]);
 
-        $marca = new Brand([
+        $brand = new Brand([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
 
-        $marca->save();
+        $brand->save();
 
         return redirect()->route('brands.index')->with('success', 'Marca creada exitosamente');
     }
 
-    public function show(Brand $marca)
+    public function show(Brand $brand)
     {
-        return view('brands.show', compact('marca'));
+        return view('brands.show', compact('brand'));
     }
 
-    public function edit(Brand $marca)
+    public function edit(Brand $brand)
     {
-        return view('brands.edit', compact('marca'));
+        return view('administrador.brands.edit', compact('brand'));
     }
 
-    public function update(Request $request, Brand $marca)
+    public function update(Request $request, Brand $brand)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
         ]);
 
-        $marca->update([
+        $brand->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
@@ -60,9 +60,9 @@ class BrandController extends Controller
         return redirect()->route('brands.index')->with('success', 'Marca actualizada exitosamente');
     }
 
-    public function destroy(Brand $marca)
+    public function destroy(Brand $brand)
     {
-        $marca->delete();
+        $brand->delete();
 
         return redirect()->route('brands.index')->with('success', 'Marca eliminada exitosamente');
     }

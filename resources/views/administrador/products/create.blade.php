@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Productos') }}
+            {{ __('Crear Producto') }}
         </h2>
     </x-slot>
 
@@ -9,134 +9,78 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("Agregar un producto") }}
+                    {{ __("Agregar Producto") }}
                 </div>
             </div>
-         
-            <form>
-           
-          
-              <div class="mb-4">
-                  <label for="productName" class="block text-sm font-medium text-white">Nombre de producto</label>
-                  <input type="text" name="productName" id="productName" class="mt-1 p-2 border rounded-md w-full" required>
-              </div>
-          
-              <div class="grid grid-cols-2 gap-4">
-                  <div class="mb-4">
-                      <label for="supplierId" class="block text-sm font-medium text-white">Proveedor</label>
-                      <select name="supplierId" id="supplierId" class="mt-1 p-2 border rounded-md w-full" required>
-                          <!-- Opciones del proveedor -->
-                      </select>
-                  </div>
-          
-                  <div class="mb-4">
-                      <label for="categoryId" class="block text-sm font-medium text-white">Categoria</label>
-                      <select name="categoryId" id="categoryId" class="mt-1 p-2 border rounded-md w-full" required>
-                          <!-- Opciones de categoría -->
-                      </select>
-                  </div>
-              </div>
-          
-              <div class="grid grid-cols-3 gap-4">
-                <div class="mb-4">
-                    <label for="quantityPerUnit" class="block text-sm font-medium text-white">Cantidad por Unidad</label>
-                    <input type="text" name="quantityPerUnit" id="quantityPerUnit" class="mt-1 p-2 border rounded-md w-full" required>
-                </div>
-            
-                <div class="mb-4">
-                    <label for="unitPrice" class="block text-sm font-medium text-white">Precio Unitario</label>
-                    <input type="text" name="unitPrice" id="unitPrice" class="mt-1 p-2 border rounded-md w-full" required>
-                </div>
-            
-                <div class="mb-4">
-                    <label for="unitsInStock" class="block text-sm font-medium text-white">Unidades en Stock</label>
-                    <input type="text" name="unitsInStock" id="unitsInStock" class="mt-1 p-2 border rounded-md w-full" required>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-3 gap-4">
-                <div class="mb-4">
-                    <label for="unitsOnOrder" class="block text-sm font-medium text-white">Unidades en Pedido</label>
-                    <input type="text" name="unitsOnOrder" id="unitsOnOrder" class="mt-1 p-2 border rounded-md w-full" required>
-                </div>
-            
-                <div class="mb-4">
-                    <label for="reoderLevel" class="block text-sm font-medium text-white">Nivel de Reorden</label>
-                    <input type="text" name="reoderLevel" id="reoderLevel" class="mt-1 p-2 border rounded-md w-full" required>
-                </div>
-            
-                <div class="mb-4">
-                    <label for="discontinued" class="block text-sm font-medium text-white">Descontinuado</label>
-                    <select name="discontinued" id="discontinued" class="mt-1 p-2 border rounded-md w-full" required>
-                        <option value="0">No</option>
-                        <option value="1">Sí</option>
-                    </select
-                </div>
-            </div>
-            
-          
-              <div class="mb-4">
-                  <button type="submit" class="bg-blue-500 text-white p-2 rounded-md">Guardar Producto</button>
-              </div>
-          </form>
-        </div>
-        <h2 class="text-xl font-bold mb-4 text-white">Lista de Productos</h2>
 
-<div class="bg-gray-800 text-white rounded-lg overflow-hidden">
-    <table class="min-w-full divide-y divide-gray-700">
-        <thead class="bg-gray-700">
-            <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre del Producto</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID del Proveedor</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID de la Categoría</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Cantidad por Unidad</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Precio Unitario</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unidades en Stock</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unidades en Pedido</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nivel de Reorden</th>
-                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descontinuado</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-700">
-            <!-- Filas de datos simulados -->
-            <tr>
-                <td class="px-6 py-4 whitespace-nowrap">1</td>
-                <td class="px-6 py-4 whitespace-nowrap">Lavanda</td>
-                <td class="px-6 py-4 whitespace-nowrap">1</td>
-                <td class="px-6 py-4 whitespace-nowrap">1</td>
-                <td class="px-6 py-4 whitespace-nowrap">10 unidades</td>
-                <td class="px-6 py-4 whitespace-nowrap">$25.00</td>
-                <td class="px-6 py-4 whitespace-nowrap">100</td>
-                <td class="px-6 py-4 whitespace-nowrap">20</td>
-                <td class="px-6 py-4 whitespace-nowrap">10</td>
-                <td class="px-6 py-4 whitespace-nowrap">No</td>
-            </tr>
-            <tr>
-                <td class="px-6 py-4 whitespace-nowrap">2</td>
-                <td class="px-6 py-4 whitespace-nowrap">Play Boy</td>
-                <td class="px-6 py-4 whitespace-nowrap">2</td>
-                <td class="px-6 py-4 whitespace-nowrap">2</td>
-                <td class="px-6 py-4 whitespace-nowrap">15 unidades</td>
-                <td class="px-6 py-4 whitespace-nowrap">$30.00</td>
-                <td class="px-6 py-4 whitespace-nowrap">80</td>
-                <td class="px-6 py-4 whitespace-nowrap">15</td>
-                <td class="px-6 py-4 whitespace-nowrap">15</td>
-                <td class="px-6 py-4 whitespace-nowrap">No</td>
-            </tr>
-            <tr>
-                <td class="px-6 py-4 whitespace-nowrap">3</td>
-                <td class="px-6 py-4 whitespace-nowrap">Dolche Ghabana</td>
-                <td class="px-6 py-4 whitespace-nowrap">3</td>
-                <td class="px-6 py-4 whitespace-nowrap">3</td>
-                <td class="px-6 py-4 whitespace-nowrap">20 unidades</td>
-                <td class="px-6 py-4 whitespace-nowrap">$40.00</td>
-                <td class="px-6 py-4 whitespace-nowrap">120</td>
-                <td class="px-6 py-4 whitespace-nowrap">25</td>
-                <td class="px-6 py-4 whitespace-nowrap">8</td>
-                <td class="px-6 py-4 whitespace-nowrap">No</td>
-            </tr>
-        </tbody>
-    </table>
+            <form method="POST" action="{{ route('products.store') }}">
+                @csrf
+
+                <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                        <label for="productName" class="block text-sm font-medium leading-6 text-white">Nombre del Producto</label>
+                        <div class="mt-2">
+                            <input type="text" name="productName" id="productName" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="supplierId" class="block text-sm font-medium leading-6 text-white">ID del Proveedor</label>
+                        <div class="mt-2">
+                            <input type="text" name="supplierId" id="supplierId" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="categoryId" class="block text-sm font-medium leading-6 text-white">ID de la Categoría</label>
+                        <div class="mt-2">
+                            <input type="text" name="categoryId" id="categoryId" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="quantityPerUnit" class="block text-sm font-medium leading-6 text-white">Cantidad por Unidad</label>
+                        <div class="mt-2">
+                            <input type="text" name="quantityPerUnit" id="quantityPerUnit" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="unitPrice" class="block text-sm font-medium leading-6 text-white">Precio Unitario</label>
+                        <div class="mt-2">
+                            <input type="text" name="unitPrice" id="unitPrice" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="unitsInStock" class="block text-sm font-medium leading-6 text-white">Unidades en Stock</label>
+                        <div class="mt-2">
+                            <input type="text" name="unitsInStock" id="unitsInStock" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="unitsOnOrder" class="block text-sm font-medium leading-6 text-white">Unidades en Orden</label>
+                        <div class="mt-2">
+                            <input type="text" name="unitsOnOrder" id="unitsOnOrder" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="reoderLevel" class="block text-sm font-medium leading-6 text-white">Nivel de Reorden</label>
+                        <div class="mt-2">
+                            <input type="text" name="reoderLevel" id="reoderLevel" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        </div>
+                    </div>
+                    <div class="sm:col-span-3">
+                        <label for="discontinued" class="block text-sm font-medium leading-6 text-white">Descatalogado</label>
+                        <div class="mt-2">
+                            <select name="discontinued" id="discontinued" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-x-6">
+                    <a href="{{ route('products.index') }}" class="text-sm font-semibold leading-6 text-gray-900">Cancelar</a>
+                    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Guardar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </x-app-layout>

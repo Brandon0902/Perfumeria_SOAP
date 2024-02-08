@@ -9,11 +9,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("Agregar Proveerdor") }}
+                    {{ __("Agregar un Proveedor") }}
                 </div>
             </div>
-            <form>
 
+            <form method="POST" action="{{ route('suppliers.store') }}">
+              @csrf
 
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div class="sm:col-span-3">
@@ -114,88 +115,6 @@
               <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Guardar</button>
             </div>
           </form>
-          <h2 class="text-xl font-bold mb-4 text-white">Lista de Proveedores</h2>
-
-<div class="bg-gray-800 text-white rounded-lg overflow-hidden">
-    <div class="overflow-auto">
-        <table class="min-w-full divide-y divide-gray-700">
-            <thead class="bg-gray-700">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la Empresa</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de Contacto</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Título de Contacto</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Dirección</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Ciudad</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Región</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-700">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">1</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Perfums Gardner</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Chiefs</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Proovedor</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Washington #657</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Amsterdam</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Europa</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">2</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Perfumes Enrique</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Enrique</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Proovedor</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Eucalipto #52</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Monterrey</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Centroamerica</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">3</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Wills Flowers</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Shing Chan</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Proovedor</td>
-                    <td class="px-6 py-4 whitespace-nowrap">heunming #987</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Beijing</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Asia</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="overflow-auto">
-        <table class="min-w-full divide-y divide-gray-700">
-            <thead class="bg-gray-700">
-                <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Código Postal</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">País</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Teléfono</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Fax</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Página Principal</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-700">
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">12345</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Paises Bajos</td>
-                    <td class="px-6 py-4 whitespace-nowrap">123-456-7890</td>
-                    <td class="px-6 py-4 whitespace-nowrap">123-456-7891</td>
-                    <td class="px-6 py-4 whitespace-nowrap">http://www.gardner.com</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">67890</td>
-                    <td class="px-6 py-4 whitespace-nowrap">Mexico</td>
-                    <td class="px-6 py-4 whitespace-nowrap">987-654-3210</td>
-                    <td class="px-6 py-4 whitespace-nowrap">987-654-3211</td>
-                    <td class="px-6 py-4 whitespace-nowrap">http://www.enripe.com</td>
-                </tr>
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">13579</td>
-                    <td class="px-6 py-4 whitespace-nowrap">China</td>
-                    <td class="px-6 py-4 whitespace-nowrap">555-123-4567</td>
-                    <td class="px-6 py-4 whitespace-nowrap">555-123-4568</td>
-                    <td class="px-6 py-4 whitespace-nowrap">http://www.wiliflow.com</td>
-                </tr>
-            </tbody>
-        </table>
         </div>
     </div>
 </x-app-layout>

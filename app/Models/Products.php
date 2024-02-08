@@ -8,25 +8,40 @@ use Illuminate\Database\Eloquent\Model;
 class Products extends Model
 {
     use HasFactory;
-    public function suppliers():HasMany{
+
+    protected $fillable = [
+        'productName',
+        'supplierId',
+        'categoryId',
+        'quantityPerUnit',
+        'unitPrice',
+        'unitsInStock',
+        'unitsOnOrder',
+        'reoderLevel',
+        'discontinued',
+    ];
+
+    public function suppliers(): HasMany
+    {
         return $this->hasMany(Suppliers::class);
     }
 
-    public function categories():belongsTo{
+    public function categories(): BelongsTo
+    {
         return $this->belongsTo(Categories::class);
     }
 
-    public function shippers():belongsTo
+    public function shippers(): BelongsTo
     {
         return $this->belongsTo(Shippers::class);
     }
 
-    public function orders():belongsTo
+    public function orders(): BelongsTo
     {
         return $this->belongsTo(Orders::class);
     }
 
-    public function orderDetails()
+    public function orderDetails(): HasMany
     {
         return $this->hasMany(OrderDetail::class);
     }

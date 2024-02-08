@@ -10,12 +10,12 @@ class SuppliersController extends Controller
     public function index()
     {
         $suppliers = Suppliers::all();
-        return view('suppliers.index', compact('suppliers'));
+        return view('administrador.suppliers.index', compact('suppliers'));
     }
 
     public function create()
     {
-        return view('suppliers.create');
+        return view('administrador.suppliers.create');
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class SuppliersController extends Controller
             'homePage' => 'nullable|string|max:255',
         ]);
 
-        $proveedor = new Suppliers($request->all());
+        $proveedor = new Suppliers($request->except('_token')); // Excluye _token aquí
         $proveedor->save();
 
         return redirect()->route('suppliers.index')->with('success', 'Proveedor creado exitosamente');
@@ -47,7 +47,7 @@ class SuppliersController extends Controller
 
     public function edit(Suppliers $proveedor)
     {
-        return view('suppliers.edit', compact('proveedor'));
+        return view('administrador.suppliers.edit', compact('proveedor'));
     }
 
     public function update(Request $request, Suppliers $proveedor)
@@ -66,6 +66,8 @@ class SuppliersController extends Controller
             'homePage' => 'nullable|string|max:255',
         ]);
 
+
+        
         $proveedor->update($request->all());
 
         return redirect()->route('suppliers.index')->with('success', 'Proveedor actualizado exitosamente');

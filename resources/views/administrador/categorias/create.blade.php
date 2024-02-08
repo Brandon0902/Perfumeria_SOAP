@@ -12,31 +12,24 @@
                     {{ __("Agregar Categorias") }}
                 </div>
             </div>
-            <form>
+            <form method="POST" action="{{ route('categories.store') }}">
+              @csrf
 
                   <div class="border-b border-gray-900/10 pb-12">
                     <h2 class="text-base font-semibold leading-7 text-white">Categorias</h2>
                     <p class="mt-1 text-sm leading-6 text-white">Una descripcion de las categorias </p>
-                    
-                    <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
-                        <label for="id" class="block text-sm font-medium leading-6 text-white">Id</label>
-                        <div class="mt-2">
-                          <input id="id" name="id" type="id" autocomplete="id" required class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        </div>
-                      </div>
             
                       <div class="sm:col-span-3">
                         <label for="categoryname" class="block text-sm font-medium leading-6 text-white">Nombre de la categoria</label>
                         <div class="mt-2">
-                          <input type="text" name="categoryname" id="categoryname" autocomplete="categoryname" requ class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                          <input type="text" name="categoryName" id="categoryname" autocomplete="categoryname" requ class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         </div>
                       </div>
               
                       <div class="sm:col-span-3">
                         <label for="descption" class="block text-sm font-medium leading-6 text-white">descripcion</label>
                         <div class="mt-2">
-                          <input type="text" name="descption" id="descption" autocomplete="descption" required class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                          <input type="text" name="description" id="description" autocomplete="description" required class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         </div>
                       </div>
                     </div>
@@ -46,35 +39,6 @@
                     <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                   </div>
               </form>
-              <h2 class="text-xl font-bold mb-4 text-white">Categorias Registradas</h2>
-
-              <div class="bg-gray-800 text-white rounded-lg overflow-hidden">
-                  <table class="min-w-full divide-y divide-gray-700">
-                      <thead class="bg-gray-700">
-                          <tr>
-                              <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la categoria</th>
-                              <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
-                          </tr>
-                      </thead>
-                      <tbody class="divide-y divide-gray-700">
-                        <tr>
-                          <td class="px-6 py-4 whitespace-nowrap">1</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Florales</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Perfumes con fragancias frescas y florales.</td>
-                      </tr>
-                      <tr>
-                          <td class="px-6 py-4 whitespace-nowrap">2</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Amaderadas</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Perfumes con notas amaderadas y cálidas.</td>
-                      </tr>
-                      <tr>
-                          <td class="px-6 py-4 whitespace-nowrap">3</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Cítricas</td>
-                          <td class="px-6 py-4 whitespace-nowrap">Perfumes con fragancias cítricas y refrescantes.</td>
-                      </tr>                      
-                      </tbody>
-                  </table>
         </div>
     </div>
 </x-app-layout>

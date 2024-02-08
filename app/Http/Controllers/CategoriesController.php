@@ -10,26 +10,24 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Categories::all();
-        return view('categories.index', compact('categories'));
+        return view('administrador.categorias.index', compact('categories'));
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('administrador.categorias.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer',
-            'categoryname' => 'required|string|max:255',
-            'descption' => 'required|string',
+            'categoryName' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
         $categoria = new Categories([
-            'id' => $request->input('id'),
-            'categoryname' => $request->input('categoryname'),
-            'descption' => $request->input('descption'),
+            'categoryName' => $request->input('categoryName'),
+            'description' => $request->input('description'),
         ]);
 
         $categoria->save();
@@ -44,21 +42,19 @@ class CategoriesController extends Controller
 
     public function edit(Categories $categoria)
     {
-        return view('categories.edit', compact('categoria'));
+        return view('administrador.categorias.edit', compact('categoria'));
     }
 
     public function update(Request $request, Categories $categoria)
     {
         $request->validate([
-            'id' => 'required|integer',
-            'categoryname' => 'required|string|max:255',
-            'descption' => 'required|string',
+            'categoryName' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
         $categoria->update([
-            'id' => $request->input('id'),
-            'categoryname' => $request->input('categoryname'),
-            'descption' => $request->input('descption'),
+            'categoryName' => $request->input('categoryName'),
+            'description' => $request->input('description'),
         ]);
 
         return redirect()->route('categories.index')->with('success', 'Categoria actualizada exitosamente');

@@ -3,13 +3,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <img src="images/fragrance.png" alt="Nuevo Logo" class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
+                <img src="{{ asset('images/fragrance.png') }}" alt="Nuevo Logo" class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <a href="{{ route('products') }}">
-                            <a href="{{ route('brands') }}">
-                                <a href="{{ route('shippers') }}">
-                                    <a href="{{ route('categories') }}">
+                        <a href="{{ route('products.index') }}">
+                            <a href="{{ route('brands.index') }}">
+                                <a href="{{ route('shippers.index') }}">
+                                    <a href="{{ route('categories.index') }}">
+                                        <a href="{{ route('suppliers.index') }}">
                     </a>
                 </div>
 
@@ -19,23 +20,23 @@
                         {{ __('Inicio') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('products')" :active="request()->routeIs('products')">
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                         {{ __('Productos') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('brands')" :active="request()->routeIs('brands')">
+                    <x-nav-link :href="route('brands.index')" :active="request()->routeIs('brands.index')">
                         {{ __('Marcas') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('shippers')" :active="request()->routeIs('shippers')">
+                    <x-nav-link :href="route('shippers.index')" :active="request()->routeIs('shippers.index')">
                         {{ __('Transportistas') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('categories')" :active="request()->routeIs('categories')">
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
                         {{ __('Categorias') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('suppliers')" :active="request()->routeIs('suppliers')">
+                    <x-nav-link :href="route('suppliers.index')" :active="request()->routeIs('suppliers.index')">
                         {{ __('Provedores') }}
                     </x-nav-link>
                     
