@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("userId");
             $table->unsignedBigInteger("productId");
+            $table->unsignedBigInteger("customerId");
+            $table->unsignedBigInteger("brandId");
             $table->date("orderDate");
             $table->date("requireDate");
             $table->date("shippedDate")->nullable();
@@ -27,7 +29,10 @@ return new class extends Migration
             $table->string("shipPostalCode");
             $table->string("shipCountry");
     
+            $table->timestamps();
+
             
+
             $table->foreign('userId')->references('id')->on('users');
             $table->foreign('productId')->references('id')->on('products');
             $table->foreign('shipVia')->references('id')->on('shippers');

@@ -9,7 +9,13 @@ class Shippers extends Model
 {
     use HasFactory;
 
-    public function products(): HasMany
+    protected $fillable = [
+        'id',
+        'companyname',
+        'phone',
+    ];
+
+    public function products()
     {
         return $this->hasMany(Products::class);
     }

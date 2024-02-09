@@ -23,6 +23,9 @@ return new class extends Migration
             $table->integer('reoderLevel');
             $table->string('discontinued');
 
+            $table->timestamps();
+
+
             //llaves foraneas
             $table->foreign('supplierId')->references('id')->on('suppliers');
             $table->foreign('categoryId')->references('id')->on('categories');

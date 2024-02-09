@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Categories extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['categoryName', 'description'];
+
     public function brands(): BelongsTo
     {
         return $this->belongsTo(Brands::class, 'brand_categories', 'brandId', 'categoryId');
