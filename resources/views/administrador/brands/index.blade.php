@@ -21,16 +21,25 @@
                 <table class="min-w-full divide-y divide-gray-700">
                     <thead class="bg-gray-700">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Imagen</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la Marca</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Acciones</th>
+                            
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
                         <!-- Loop sobre las marcas y mostrarlas en la tabla -->
                         @foreach($brands as $brand)
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($brand->image)
+                                    <img src="{{ asset('images/' . $brand->image) }}" alt="{{ $brand->name }}" class="h-16 w-16 rounded-full object-cover">
+                                @else
+                                    Sin imagen
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $brand->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $brand->name }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $brand->description }}</td>

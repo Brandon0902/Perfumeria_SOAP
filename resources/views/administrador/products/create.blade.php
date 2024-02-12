@@ -12,8 +12,18 @@
                     {{ __("Agregar Producto") }}
                 </div>
             </div>
+ 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-            <form method="POST" action="{{ route('products.store') }}">
+            <form method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -62,7 +72,7 @@
                     <div class="sm:col-span-3">
                         <label for="reoderLevel" class="block text-sm font-medium leading-6 text-white">Nivel de Reorden</label>
                         <div class="mt-2">
-                            <input type="text" name="reoderLevel" id="reoderLevel" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <input type="text" name="reorderLevel" id="reorderLevel" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                         </div>
                     </div>
                     <div class="sm:col-span-3">
@@ -73,6 +83,14 @@
                                 <option value="0">No</option>
                             </select>
                         </div>
+                    </div>
+                </div>
+
+                <div class="sm:col-span-3">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen</label>
+                    <div class="mt-2">
+                        <input type="file" name="image" id="image" accept="image/*" required
+                            class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                 </div>
 

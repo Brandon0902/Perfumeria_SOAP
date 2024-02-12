@@ -20,17 +20,23 @@
                 <table class="min-w-full divide-y divide-gray-700">
                     <thead class="bg-gray-700">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Imagen</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la
-                                Empresa</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la Empresa</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Teléfono</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Acciones</th>
-
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
                         @foreach($shippers as $shipper)
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($shipper->image)
+                                    <img src="{{ asset('images/' . $shipper->image) }}" alt="{{ $shipper->name }}" class="h-16 w-16 rounded-full object-cover">
+                                @else
+                                    Sin imagen
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->companyname }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->phone }}</td>
@@ -41,6 +47,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Eliminar</button>
                                 </form>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

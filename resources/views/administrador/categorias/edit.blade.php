@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('categories.update', $categoria) }}">
+            <form method="POST" action="{{ route('categories.update', $categoria) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
 
@@ -25,6 +25,21 @@
                 <div class="mb-4">
                     <label for="description" class="block text-sm font-medium text-white">Descripción</label>
                     <input type="text" name="description" id="description" class="mt-1 p-2 border rounded-md w-full" value="{{ $categoria->description }}" required>
+                </div>
+
+                <!-- Mostrar imagen actual de la marca -->
+                <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-white">Imagen actual de la Marca</label>
+                    @if($categoria->image)
+                        <img src="{{ asset('images/' . $categoria->image) }}" alt="{{ $categoria->name }}" class="h-16 w-16 rounded-full object-cover">
+                    @else
+                        Sin imagen
+                    @endif
+                </div>
+
+                <div class="sm:col-span-3 mt-4">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen</label>
+                    <input type="file" name="image" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
 
                 <div class="mb-4">

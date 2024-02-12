@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('products.update', $producto) }}">
+            <form method="POST" action="{{ route('products.update', $producto) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
 
@@ -63,7 +63,7 @@
                     <div class="sm:col-span-3">
                         <label for="reoderLevel" class="block text-sm font-medium text-white">Nivel de Reorden</label>
                         <div class="mt-2">
-                            <input type="text" name="reoderLevel" id="reoderLevel" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" value="{{ old('reoderLevel', $producto->reoderLevel) }}" required>
+                            <input type="text" name="reorderLevel" id="reorderLevel" class="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" value="{{ old('reoderLevel', $producto->reorderLevel) }}" required>
                         </div>
                     </div>
                     <div class="sm:col-span-3">
@@ -75,6 +75,22 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- Mostrar imagen actual de la marca -->
+                <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-white">Imagen actual de la Marca</label>
+                    @if($producto->image)
+                        <img src="{{ asset('images/' . $producto->image) }}" alt="{{ $producto->name }}" class="h-16 w-16 rounded-full object-cover">
+                    @else
+                        Sin imagen
+                    @endif
+                </div>
+
+                <div class="sm:col-span-3 mt-4">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen</label>
+                    <input type="file" name="image" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
                 </div>
 
                 <div class="mt-6 flex items-center justify-end gap-x-6">

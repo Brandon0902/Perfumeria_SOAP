@@ -23,15 +23,24 @@ class BrandController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
-
+    
         $brand = new Brand([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
-
+    
+        // Procesamiento de la imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $brand->image = $imageName;
+        }
+    
         $brand->save();
-
+    
         return redirect()->route('brands.index')->with('success', 'Marca creada exitosamente');
     }
 
@@ -50,18 +59,31 @@ class BrandController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
-        $brand->update([
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-        ]);
+        $brand->name = $request->input('name');
+        $brand->description = $request->input('description');
+
+        // Almacena el nuevo archivo de imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $brand->image = $imageName;
+        }
+
+        $brand->save();
 
         return redirect()->route('brands.index')->with('success', 'Marca actualizada exitosamente');
     }
 
     public function destroy(Brand $brand)
     {
+        if ($brand->image) {
+            unlink(public_path('images/' . $brand->image));
+        }
+
         $brand->delete();
 
         return redirect()->route('brands.index')->with('success', 'Marca eliminada exitosamente');

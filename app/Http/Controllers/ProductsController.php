@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Products; 
+use App\Models\Products;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -28,9 +28,12 @@ class ProductsController extends Controller
             'unitPrice' => 'required|numeric',
             'unitsInStock' => 'required|integer',
             'unitsOnOrder' => 'required|integer',
-            'reoderLevel' => 'required|integer',
+            'reorderLevel' => 'required|integer',
             'discontinued' => 'required|boolean',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
+
+        var_dump('Aqui es despues de la validacion');
 
         $producto = new Products([
             'productName' => $request->input('productName'),
@@ -40,14 +43,23 @@ class ProductsController extends Controller
             'unitPrice' => $request->input('unitPrice'),
             'unitsInStock' => $request->input('unitsInStock'),
             'unitsOnOrder' => $request->input('unitsOnOrder'),
-            'reoderLevel' => $request->input('reoderLevel'),
+            'reorderLevel' => $request->input('reorderLevel'),
             'discontinued' => $request->input('discontinued'),
         ]);
+
+        // Guardar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $producto->image = $imageName;
+        }
 
         $producto->save();
 
         return redirect()->route('products.index')->with('success', 'Producto creado exitosamente');
     }
+
 
     public function show(Products $producto)
     {
@@ -69,8 +81,9 @@ class ProductsController extends Controller
             'unitPrice' => 'required|numeric',
             'unitsInStock' => 'required|integer',
             'unitsOnOrder' => 'required|integer',
-            'reoderLevel' => 'required|integer',
+            'reorderLevel' => 'required|integer',
             'discontinued' => 'required|boolean',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $producto->update([
@@ -81,15 +94,35 @@ class ProductsController extends Controller
             'unitPrice' => $request->input('unitPrice'),
             'unitsInStock' => $request->input('unitsInStock'),
             'unitsOnOrder' => $request->input('unitsOnOrder'),
-            'reoderLevel' => $request->input('reoderLevel'),
+            'reorderLevel' => $request->input('reorderLevel'),
             'discontinued' => $request->input('discontinued'),
         ]);
+
+        // Actualizar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+
+            // Eliminar la imagen anterior si existe
+            if ($producto->image) {
+                unlink(public_path('images/' . $producto->image));
+            }
+
+            $producto->image = $imageName;
+            $producto->save();
+        }
 
         return redirect()->route('products.index')->with('success', 'Producto actualizado exitosamente');
     }
 
     public function destroy(Products $producto)
     {
+        // Eliminar la imagen asociada antes de eliminar el producto
+        if ($producto->image) {
+            unlink(public_path('images/' . $producto->image));
+        }
+
         $producto->delete();
 
         return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente');

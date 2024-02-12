@@ -17,7 +17,7 @@ class Products extends Model
         'unitPrice',
         'unitsInStock',
         'unitsOnOrder',
-        'reoderLevel',
+        'reorderLevel',
         'discontinued',
     ];
 

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Suppliers; 
+use App\Models\Suppliers;
 use Illuminate\Http\Request;
 
 class SuppliersController extends Controller
@@ -32,9 +32,19 @@ class SuppliersController extends Controller
             'phone' => 'required|string|max:255',
             'fax' => 'nullable|string|max:255',
             'homePage' => 'nullable|string|max:255',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $proveedor = new Suppliers($request->except('_token')); // Excluye _token aquí
+        
+        // Guardar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $proveedor->image = $imageName;
+        }
+
         $proveedor->save();
 
         return redirect()->route('suppliers.index')->with('success', 'Proveedor creado exitosamente');
@@ -64,17 +74,36 @@ class SuppliersController extends Controller
             'phone' => 'required|string|max:255',
             'fax' => 'nullable|string|max:255',
             'homePage' => 'nullable|string|max:255',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
+        $proveedor->update($request->except('_token'));
 
-        
-        $proveedor->update($request->all());
+        // Actualizar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+
+            // Eliminar la imagen anterior si existe
+            if ($proveedor->image) {
+                unlink(public_path('images/' . $proveedor->image));
+            }
+
+            $proveedor->image = $imageName;
+            $proveedor->save();
+        }
 
         return redirect()->route('suppliers.index')->with('success', 'Proveedor actualizado exitosamente');
     }
 
     public function destroy(Suppliers $proveedor)
     {
+        // Eliminar la imagen asociada antes de eliminar el proveedor
+        if ($proveedor->image) {
+            unlink(public_path('images/' . $proveedor->image));
+        }
+
         $proveedor->delete();
 
         return redirect()->route('suppliers.index')->with('success', 'Proveedor eliminado exitosamente');

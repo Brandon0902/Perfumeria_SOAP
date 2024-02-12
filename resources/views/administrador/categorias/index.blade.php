@@ -20,6 +20,7 @@
                 <table class="min-w-full divide-y divide-gray-700">
                     <thead class="bg-gray-700">
                         <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Imagen</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">ID</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre de la Categoría</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
@@ -29,6 +30,13 @@
                     <tbody class="divide-y divide-gray-700">
                         @foreach($categories as $category)
                         <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($category->image)
+                                    <img src="{{ asset('images/' . $category->image) }}" alt="{{ $category->categoryName }}" class="h-16 w-16 rounded-full object-cover">
+                                @else
+                                    Sin imagen
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $category->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $category->categoryName }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">{{ $category->description }}</td>

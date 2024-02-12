@@ -23,12 +23,21 @@ class CategoriesController extends Controller
         $request->validate([
             'categoryName' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $categoria = new Categories([
             'categoryName' => $request->input('categoryName'),
             'description' => $request->input('description'),
         ]);
+
+        // Guardar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $categoria->image = $imageName;
+        }
 
         $categoria->save();
 
@@ -50,6 +59,7 @@ class CategoriesController extends Controller
         $request->validate([
             'categoryName' => 'required|string|max:255',
             'description' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $categoria->update([
@@ -57,11 +67,31 @@ class CategoriesController extends Controller
             'description' => $request->input('description'),
         ]);
 
+        // Actualizar la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+
+            // Eliminar la imagen anterior si existe
+            if ($categoria->image) {
+                unlink(public_path('images/' . $categoria->image));
+            }
+
+            $categoria->image = $imageName;
+            $categoria->save();
+        }
+
         return redirect()->route('categories.index')->with('success', 'Categoria actualizada exitosamente');
     }
 
     public function destroy(Categories $categoria)
     {
+        // Eliminar la imagen asociada antes de eliminar la categoría
+        if ($categoria->image) {
+            unlink(public_path('images/' . $categoria->image));
+        }
+
         $categoria->delete();
 
         return redirect()->route('categories.index')->with('success', 'Categoria eliminada exitosamente');

@@ -12,7 +12,7 @@
                     {{ __("Editar Proveedor") }}
                 </div>
             </div>
-            <form method="POST" action="{{ route('suppliers.update', $proveedor->id) }}">
+            <form method="POST" action="{{ route('suppliers.update', $proveedor->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
 
@@ -71,6 +71,22 @@
                         <label for="homePage" class="block text-sm font-medium leading-6 text-gray-700 dark:text-gray-200">Página Principal</label>
                         <input type="text" name="homePage" id="homePage" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" value="{{ $proveedor->homePage }}">
                     </div>
+
+                    !-- Mostrar imagen actual de la marca -->
+                <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-white">Imagen actual de la Marca</label>
+                    @if($proveedor->image)
+                        <img src="{{ asset('images/' . $proveedor->image) }}" alt="{{ $proveedor->name }}" class="h-16 w-16 rounded-full object-cover">
+                    @else
+                        Sin imagen
+                    @endif
+                </div>
+
+                <div class="sm:col-span-3 mt-4">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen</label>
+                    <input type="file" name="image" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
                 </div>
 
                 <!-- Botones de acción -->
