@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->String("companyname");
             $table->Integer("phone");
-
+            $table->string('image')->nulleable();
             $table->timestamps();
 
         });  // <- Agrega el cierre de la función create para 'shippers'

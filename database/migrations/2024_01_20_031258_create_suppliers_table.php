@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('phone',20);
             $table->string('fax',20);
             $table->string('homePage',30);
-
+            $table->string('image')->nulleable();
             $table->timestamps();
 
         });

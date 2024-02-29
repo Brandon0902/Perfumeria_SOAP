@@ -29,6 +29,7 @@ class CategoriesController extends Controller
         $categoria = new Categories([
             'categoryName' => $request->input('categoryName'),
             'description' => $request->input('description'),
+            
         ]);
 
         // Guardar la imagen si se proporciona

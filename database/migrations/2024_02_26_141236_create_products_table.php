@@ -13,11 +13,21 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name');
-            $table->double('price');
-            $table->text('description');
-            $table->string('image');
+            $table->unsignedBigInteger('supplierId');
+            $table->unsignedBigInteger('categoryId');
+            $table->integer('quantityPerUnit');
+            $table->double('price',8,2);
+            $table->double('description');
+            $table->integer('unitsInStock');
+            $table->integer('unitsOnOrder');
+            $table->integer('reoderLevel');
+            $table->string('discontinued');
+            $table->string('image')->nulleable();
+
+            //llaves foraneas
+            $table->foreign('supplierId')->references('id')->on('suppliers');
+            $table->foreign('categoryId')->references('id')->on('categories');
             
         });
     }

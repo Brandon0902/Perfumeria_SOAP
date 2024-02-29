@@ -25,6 +25,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nombre del Producto</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Proveedor</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Categoría</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Descripción</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Cantidad por Unidad</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Precio Unitario</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unidades en Stock</th>
@@ -44,11 +45,12 @@
                                         Sin imagen
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->productName }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->supplierId }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->categoryId }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->description }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->quantityPerUnit }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->unitPrice }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $product->price }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->unitsInStock }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->unitsOnOrder }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $product->reorderLevel }}</td>

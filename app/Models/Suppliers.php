@@ -21,6 +21,7 @@ class Suppliers extends Model
         'phone',
         'fax',
         'homePage',
+        'image',
     ];
 
     public function products()

@@ -9,7 +9,7 @@ class Categories extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['categoryName', 'description'];
+    protected $fillable = ['categoryName', 'description', 'image'];
 
     public function brands(): BelongsTo
     {
