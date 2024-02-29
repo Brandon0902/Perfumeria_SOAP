@@ -9,7 +9,7 @@ class CartController extends Controller
     public function cartList()
     {
         $cartItems = \Cart::getContent();
-        // dd($cartItems);
+        //dd($cartItems);
         return view('cart', compact('cartItems'));
     }
 
@@ -23,6 +23,7 @@ class CartController extends Controller
             'quantity' => $request->quantity,
             'attributes' => array(
                 'image' => $request->image,
+            
             )
         ]);
         session()->flash('success', 'Product is Added to Cart Successfully !');

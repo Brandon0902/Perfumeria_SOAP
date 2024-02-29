@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Suppliers;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 
 class SuppliersController extends Controller
 {
     public function index()
     {
-        $suppliers = Suppliers::all();
+        $suppliers = Supplier::all();
         return view('administrador.suppliers.index', compact('suppliers'));
     }
 
@@ -35,7 +35,7 @@ class SuppliersController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
-        $proveedor = new Suppliers($request->except('_token')); // Excluye _token aquí
+        $proveedor = new Supplier($request->except('_token')); // Excluye _token aquí
         
         // Guardar la imagen si se proporciona
         if ($request->hasFile('image')) {
@@ -50,17 +50,17 @@ class SuppliersController extends Controller
         return redirect()->route('suppliers.index')->with('success', 'Proveedor creado exitosamente');
     }
 
-    public function show(Suppliers $proveedor)
+    public function show(Supplier $proveedor)
     {
         return view('suppliers.show', compact('proveedor'));
     }
 
-    public function edit(Suppliers $proveedor)
+    public function edit(Supplier $proveedor)
     {
         return view('administrador.suppliers.edit', compact('proveedor'));
     }
 
-    public function update(Request $request, Suppliers $proveedor)
+    public function update(Request $request, Supplier $proveedor)
     {
         $request->validate([
             'companyName' => 'required|string|max:255',
@@ -97,7 +97,7 @@ class SuppliersController extends Controller
         return redirect()->route('suppliers.index')->with('success', 'Proveedor actualizado exitosamente');
     }
 
-    public function destroy(Suppliers $proveedor)
+    public function destroy(Supplier $proveedor)
     {
         // Eliminar la imagen asociada antes de eliminar el proveedor
         if ($proveedor->image) {

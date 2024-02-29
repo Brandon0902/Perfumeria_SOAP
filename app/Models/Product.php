@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Supplier;
+use App\Models\Categories;
+
 
 class Product extends Model
 {
@@ -20,26 +23,27 @@ class Product extends Model
         'unitsOnOrder',
         'reorderLevel',
         'discontinued',
+        'image',
     ];
 
-    public function suppliers(): HasMany
+    public function supplier()
     {
-        return $this->hasMany(Suppliers::class);
+        return $this->belongsTo(Supplier::class, 'supplierId');
     }
 
-    public function categories(): BelongsTo
+    public function category()
     {
-        return $this->belongsTo(Categories::class);
+        return $this->belongsTo(Categories::class, 'categoryId');
     }
 
-    public function shippers(): BelongsTo
+    public function shippers(): HasMany
     {
-        return $this->belongsTo(Shippers::class);
+        return $this->hasMany(Shipper::class);
     }
 
-    public function orders(): BelongsTo
+    public function orders(): HasMany
     {
-        return $this->belongsTo(Orders::class);
+        return $this->hasMany(Order::class);
     }
 
     public function orderDetails(): HasMany

@@ -29,12 +29,11 @@
                           <tbody>
                               @foreach ($cartItems as $item)
                             <tr>
-                              <td class="hidden pb-4 md:table-cell">
-                                <a href="#">
-                                  <img src="{{ $item->attributes->image }}" class="w-20 rounded" alt="Thumbnail">
-                                </a>
-                              </td>
-                              <td>
+                                <td class="hidden pb-4 md:table-cell">
+                                    <a href="#">
+                                        <img src="{{ asset('images/' . $item->attributes->image) }}" class="w-20 rounded" alt="Thumbnail">
+                                    </a>
+                                </td>
                                 <a href="#">
                                   <p class="mb-2 md:ml-4">{{ $item->name }}</p>
                                   

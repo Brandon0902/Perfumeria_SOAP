@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('categoryId');
             $table->integer('quantityPerUnit');
             $table->double('price',8,2);
-            $table->double('description');
+            $table->string ('description');
             $table->integer('unitsInStock');
             $table->integer('unitsOnOrder');
             $table->integer('reoderLevel');

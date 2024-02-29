@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Products::all();
+        $products = Product::all();
         return view('administrador.products.index', compact('products'));
     }
 
@@ -34,7 +34,7 @@ class ProductController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
-        $producto = new Products([
+        $producto = new Product([
             'name' => $request->input('name'),
             'supplierId' => $request->input('supplierId'),
             'categoryId' => $request->input('categoryId'),
@@ -61,17 +61,17 @@ class ProductController extends Controller
     }
 
 
-    public function show(Products $producto)
+    public function show(Product $producto)
     {
         return view('administrador.products.show', compact('producto'));
     }
 
-    public function edit(Products $producto)
+    public function edit(Product $producto)
     {
         return view('administrador.products.edit', compact('producto'));
     }
 
-    public function update(Request $request, Products $producto)
+    public function update(Request $request, Product $producto)
     {
         $request->validate([
             'name' => 'required|string|max:255',
@@ -118,7 +118,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', 'Producto actualizado exitosamente');
     }
 
-    public function destroy(Products $producto)
+    public function destroy(Product $producto)
     {
         // Eliminar la imagen asociada antes de eliminar el producto
         if ($producto->image) {
@@ -134,5 +134,22 @@ class ProductController extends Controller
         $products=Product::all();
 
         return view('products', compact('products'));
+    }
+    
+    public function getProductDetails(Product $product)
+    {
+        // Obtener los detalles del producto, incluyendo el nombre, precio, descripción, proveedor y región
+        $productDetails = [
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'supplier' => $product->supplier->companyName,
+            'region' => $product->supplier->region, 
+            'category' => $product->category->categoryName,
+            'image' => $product->image,
+        ];
+
+        // Devolver los detalles del producto a la vista
+        return view('detalles_producto', compact('productDetails'));
     }
 }

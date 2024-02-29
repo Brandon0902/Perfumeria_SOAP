@@ -5,7 +5,6 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ShippersController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\CategoriesController;
@@ -26,6 +25,7 @@ Route::get('/', function () {
 });
 
 Route::get('products', [ProductController::class, 'productList'])->name('products.list');
+Route::get('productsDetalle/{product}', [ProductController::class, 'getProductDetails'])->name('product.detail');
 Route::get('cart', [CartController::class, 'cartList'])->name('cart.list');
 Route::post('cart', [CartController::class, 'addToCart'])->name('cart.store');
 Route::post('update-cart', [CartController::class, 'updateCart'])->name('cart.update');
@@ -42,12 +42,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rutas para articulos
-    Route::get('/articulos', [ProductsController::class, 'index'])->name('products.index');
-    Route::get('/articulos/create', [ProductsController::class, 'create'])->name('products.create');
-    Route::post('/articulos',[ProductsController::class, 'store'])->name('products.store');
-    Route::get('/articulos/{producto}/edit', [ProductsController::class, 'edit'])->name('products.edit');
-    Route::patch('/articulos/{producto}', [ProductsController::class, 'update'])->name('products.update');
-    Route::delete('/articulos/{producto}', [ProductsController::class, 'destroy'])->name('products.destroy');
+    Route::get('/articulos', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/articulos/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/articulos',[ProductController::class, 'store'])->name('products.store');
+    Route::get('/articulos/{producto}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::patch('/articulos/{producto}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/articulos/{producto}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     // Rutas para Marcas
     Route::get('/marcas', [BrandController::class, 'index'])->name('brands.index');
