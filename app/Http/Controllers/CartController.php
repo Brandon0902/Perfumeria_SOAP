@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
 {
     public function cartList()
     {
         $cartItems = \Cart::getContent();
-        //dd($cartItems);
+        Session::put('cartItems', $cartItems);
         return view('cart', compact('cartItems'));
     }
 
@@ -63,5 +64,10 @@ class CartController extends Controller
         session()->flash('success', 'All Item Cart Clear Successfully !');
 
         return redirect()->route('cart.list');
+    }
+
+    public function redirectToOrderForm()
+    {
+        return redirect()->route('order.form');
     }
 }

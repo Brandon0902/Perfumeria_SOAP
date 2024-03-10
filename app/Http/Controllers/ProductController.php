@@ -32,6 +32,8 @@ class ProductController extends Controller
             'reorderLevel' => 'required|integer',
             'discontinued' => 'required|string', // No cambia esta validación
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
+            'image2' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
+            'image3' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
         ]);
 
         $producto = new Product([
@@ -47,12 +49,28 @@ class ProductController extends Controller
             'discontinued' => $request->input('discontinued'),
         ]);
 
-        // Guardar la imagen si se proporciona
+                // Guardar la imagen si se proporciona
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images'), $imageName);
             $producto->image = $imageName;
+        }
+
+        // Guardar la imagen si se proporciona
+        if ($request->hasFile('image2')) {
+            $image2 = $request->file('image2');
+            $imageName2 = uniqid() . '.' . $image2->getClientOriginalExtension();
+            $image2->move(public_path('images'), $imageName2);
+            $producto->image2 = $imageName2;
+        }
+
+        // Guardar la imagen si se proporciona
+        if ($request->hasFile('image3')) {
+            $image3 = $request->file('image3');
+            $imageName3 = uniqid() . '.' . $image3->getClientOriginalExtension();
+            $image3->move(public_path('images'), $imageName3);
+            $producto->image3 = $imageName3;
         }
 
         $producto->save();

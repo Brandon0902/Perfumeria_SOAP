@@ -24,6 +24,9 @@ class Product extends Model
         'reorderLevel',
         'discontinued',
         'image',
+        'image2',
+        'image3',
+        
     ];
 
     public function supplier()

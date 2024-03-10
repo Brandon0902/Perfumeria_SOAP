@@ -99,6 +99,16 @@
                     <input type="file" name="image" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 </div>
 
+                <div class="sm:col-span-3 mt-4">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen 2</label>
+                    <input type="file" name="image2" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
+                <div class="sm:col-span-3 mt-4">
+                    <label for="image" class="block text-sm font-medium leading-6 text-white">Imagen 3</label>
+                    <input type="file" name="image3" id="image" class="block w-full py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                </div>
+
                 </div>
 
                 <div class="mt-6 flex items-center justify-end gap-x-6">
