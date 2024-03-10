@@ -17,36 +17,53 @@ class ProviderController extends Controller
     }
 
     public function callback($provider)
-    {
-        try {
-            $SocialUser = Socialite::driver($provider)->user();
-           if(User::where('email', $SocialUser->getEmail())->exists()){
-               return redirect('/login')->withErrors(['email' => 'This email uses different method to login.']);
-           }
-           $user = User::where([
-               'provider' => $provider,
-               'provider_id' => $SocialUser->id
-           ])->first();
-           if (!$user){
-               $password = Str::random(12);
-               $user = User::create([
-                   'name' => $SocialUser->getName(),
-                   'email' => $SocialUser->getEmail(),
-                   'username' => User::generateUserName($SocialUser->getNickname()),
-                   'password' => $password,
-                   'provider' => $provider,
-                   'provider_id' => $SocialUser->getId(),
-                   'provider_token' => $SocialUser->token,
-               ]);
-               $user->sendEmailVerificationNotification();
-               $user->update([
-                   'password' => bcrypt($password)
-               ]);
-           }
+{
+    try {
+        $socialUser = Socialite::driver($provider)->user();
+
+        // Verificar si el usuario ya existe en la base de datos
+        $user = User::where('email', $socialUser->getEmail())->first();
+
+        if ($user) {
+            // Si el usuario existe, iniciar sesión y redirigir al dashboard
             Auth::login($user);
             return redirect('/dashboard');
-        } catch (\Exception $e){
-            return redirect('/login');
         }
+
+        // Buscar un usuario existente con el mismo proveedor y ID de proveedor
+        $user = User::where([
+            'provider' => $provider,
+            'provider_id' => $socialUser->id
+        ])->first();
+
+        if (!$user) {
+            // Si no se encuentra un usuario, crear uno nuevo
+            $password = Str::random(12);
+            $user = User::create([
+                'name' => $socialUser->getName(),
+                'email' => $socialUser->getEmail(),
+                'username' => User::generateUserName($socialUser->getNickname()),
+                'password' => bcrypt($password),
+                'provider' => $provider,
+                'provider_id' => $socialUser->getId(),
+                'provider_token' => $socialUser->token,
+                'avatar' => $socialUser->getAvatar(),
+            ]);
+
+            // Enviar notificación de verificación de correo electrónico
+            $user->sendEmailVerificationNotification();
+        }
+
+        // Iniciar sesión con el usuario
+        Auth::login($user);
+
+        // Redirigir al panel de control
+        return redirect('/dashboard');
+    } catch (\Exception $e) {
+        // Manejar cualquier excepción
+        var_dump($e);
+        return redirect('/login');
+        }   
     }
+
 }
