@@ -2,15 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\RequestException;
 
 class ProductController extends Controller
 {
+    protected $apiBaseUrl;
+
+    public function __construct()
+    {
+        $this->apiBaseUrl = 'http://127.0.0.1:8000/api';
+    }
+
     public function index()
     {
-        $products = Product::all();
-        return view('administrador.products.index', compact('products'));
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ])->get($this->apiBaseUrl.'/products');
+            $statusCode = $response->status();
+
+            if ($statusCode === 200) {
+                // Accede directamente a los productos sin anidarlos dentro de otro arreglo
+                $products = $response->json()['products'];
+                //dd($products);
+                return view('administrador.products.index', compact('products'));
+            } else {
+                return response()->json(['error' => 'Error al obtener los productos de la API'], $statusCode);
+            }
+        } catch (RequestException $e) {
+            return response()->json(['error' => 'Error de conexión con la API'], 500);
+        }
     }
 
     public function create()
@@ -20,154 +44,159 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'supplierId' => 'required|integer',
-            'categoryId' => 'required|integer',
-            'description' => 'required',
-            'quantityPerUnit' => 'required|string',
-            'price' => 'required|numeric',
-            'unitsInStock' => 'required|integer',
-            'unitsOnOrder' => 'required|integer',
-            'reorderLevel' => 'required|integer',
-            'discontinued' => 'required|string', // No cambia esta validación
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-            'image2' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-            'image3' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
+        try {
+            $token = $this->getToken();
+            $http = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token
+            ]);
 
-        $producto = new Product([
-            'name' => $request->input('name'),
-            'supplierId' => $request->input('supplierId'),
-            'categoryId' => $request->input('categoryId'),
-            'description' => $request->input('description'),
-            'quantityPerUnit' => $request->input('quantityPerUnit'),
-            'price' => $request->input('price'),
-            'unitsInStock' => $request->input('unitsInStock'),
-            'unitsOnOrder' => $request->input('unitsOnOrder'),
-            'reorderLevel' => $request->input('reorderLevel'),
-            'discontinued' => $request->input('discontinued'),
-        ]);
-
-                // Guardar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $producto->image = $imageName;
-        }
-
-        // Guardar la imagen si se proporciona
-        if ($request->hasFile('image2')) {
-            $image2 = $request->file('image2');
-            $imageName2 = uniqid() . '.' . $image2->getClientOriginalExtension();
-            $image2->move(public_path('images'), $imageName2);
-            $producto->image2 = $imageName2;
-        }
-
-        // Guardar la imagen si se proporciona
-        if ($request->hasFile('image3')) {
-            $image3 = $request->file('image3');
-            $imageName3 = uniqid() . '.' . $image3->getClientOriginalExtension();
-            $image3->move(public_path('images'), $imageName3);
-            $producto->image3 = $imageName3;
-        }
-
-        $producto->save();
-
-        return redirect()->route('products.index')->with('success', 'Producto creado exitosamente');
-    }
-
-
-    public function show(Product $producto)
-    {
-        return view('administrador.products.show', compact('producto'));
-    }
-
-    public function edit(Product $producto)
-    {
-        return view('administrador.products.edit', compact('producto'));
-    }
-
-    public function update(Request $request, Product $producto)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'supplierId' => 'required|integer',
-            'categoryId' => 'required|integer',
-            'description' => 'required',
-            'quantityPerUnit' => 'required|string',
-            'price' => 'required|numeric',
-            'unitsInStock' => 'required|integer',
-            'unitsOnOrder' => 'required|integer',
-            'reorderLevel' => 'required|integer',
-            'discontinued' => 'required|string', // No cambia esta validación
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
-
-        $producto->update([
-            'name' => $request->input('name'),
-            'supplierId' => $request->input('supplierId'),
-            'categoryId' => $request->input('categoryId'),
-            'description' => $request->input('description'),
-            'quantityPerUnit' => $request->input('quantityPerUnit'),
-            'price' => $request->input('price'),
-            'unitsInStock' => $request->input('unitsInStock'),
-            'unitsOnOrder' => $request->input('unitsOnOrder'),
-            'reorderLevel' => $request->input('reorderLevel'),
-            'discontinued' => $request->input('discontinued'),
-        ]);
-
-        // Actualizar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-
-            // Eliminar la imagen anterior si existe
-            if ($producto->image) {
-                unlink(public_path('images/' . $producto->image));
+            // Adjuntar la imagen principal
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $http->attach(
+                    'image', file_get_contents($image), $image->getClientOriginalName()
+                );
             }
 
-            $producto->image = $imageName;
-            $producto->save();
-        }
+            // Adjuntar la imagen 2
+            if ($request->hasFile('image2')) {
+                $image2 = $request->file('image2');
+                $http->attach(
+                    'image2', file_get_contents($image2), $image2->getClientOriginalName()
+                );
+            }
 
-        return redirect()->route('products.index')->with('success', 'Producto actualizado exitosamente');
+            // Adjuntar la imagen 3
+            if ($request->hasFile('image3')) {
+                $image3 = $request->file('image3');
+                $http->attach(
+                    'image3', file_get_contents($image3), $image3->getClientOriginalName()
+                );
+            }
+
+            $response = $http->post($this->apiBaseUrl.'/products', $request->except('_token'));
+
+            if ($response->successful()) {
+                return redirect()->route('products.index')->with('success', 'Producto creado exitosamente');
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Error al crear el producto: ' . $response->body()]);
+            }
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
+        }
     }
 
-    public function destroy(Product $producto)
+    public function show($id)
     {
-        // Eliminar la imagen asociada antes de eliminar el producto
-        if ($producto->image) {
-            unlink(public_path('images/' . $producto->image));
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ])->get($this->apiBaseUrl.'/products/'.$id);
+            $product = json_decode($response->body(), true);
+            return view('administrador.products.show', compact('product'));
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
         }
-
-        $producto->delete();
-
-        return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente');
     }
 
-    public function productList(){
-        $products=Product::all();
-
-        return view('products', compact('products'));
-    }
     
-    public function getProductDetails(Product $product)
+    public function edit($id)
     {
-        // Obtener los detalles del producto, incluyendo el nombre, precio, descripción, proveedor y región
-        $productDetails = [
-            'name' => $product->name,
-            'price' => $product->price,
-            'description' => $product->description,
-            'supplier' => $product->supplier->companyName,
-            'region' => $product->supplier->region, 
-            'category' => $product->category->categoryName,
-            'image' => $product->image,
-        ];
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ])->get($this->apiBaseUrl.'/products/'.$id);
+            
+            $product = json_decode($response->body(), true);
+            
+            // Verificar si se obtuvo correctamente el producto
+            if(isset($product['product'])) {
+                // Acceder directamente al arreglo 'product'
+                $product = $product['product'];
+                //dd($product);
 
-        // Devolver los detalles del producto a la vista
-        return view('detalles_producto', compact('productDetails'));
+                // Pasar el arreglo a la vista
+                return view('administrador.products.edit', compact('product'));
+            } else {
+                // Manejar el caso donde no se encuentra el producto
+                return back()->withInput()->withErrors(['error' => 'No se encontró el producto']);
+            }
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción ocurrida durante la solicitud
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
+        }
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $token = $this->getToken();
+            $http = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ]);
+
+            // Adjuntar la imagen principal
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $http->attach(
+                    'image', file_get_contents($image), $image->getClientOriginalName()
+                );
+            }
+
+            // Adjuntar la imagen 2
+            if ($request->hasFile('image2')) {
+                $image2 = $request->file('image2');
+                $http->attach(
+                    'image2', file_get_contents($image2), $image2->getClientOriginalName()
+                );
+            }
+
+            // Adjuntar la imagen 3
+            if ($request->hasFile('image3')) {
+                $image3 = $request->file('image3');
+                $http->attach(
+                    'image3', file_get_contents($image3), $image3->getClientOriginalName()
+                );
+            }
+
+            // Imprimir los datos que se están enviando
+            //dd($http, $request->except('_token'));
+
+            $response = $http->post($this->apiBaseUrl.'/products/'.$id, $request->except('_token'));
+
+            if ($response->successful()) {
+                return redirect()->route('products.index')->with('success', 'Producto actualizado exitosamente');
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Error al actualizar el producto: ' . $response->body()]);
+            }
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
+        }
+    }
+
+
+    public function destroy($id)
+    {
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ])->delete($this->apiBaseUrl.'/products/'.$id);
+            return redirect()->route('products.index')->with('success', 'Producto eliminado exitosamente');
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
+        }
+    }
+
+    private function getToken() {
+        $token = session('auth_token');
+        if ($token) {
+            return $token;
+        } else {
+            return 'Error: Token de autenticación no encontrado en la sesión';
+        }
     }
 }

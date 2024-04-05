@@ -2,15 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categories; 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Client\RequestException;
 
 class CategoriesController extends Controller
 {
+    protected $apiBaseUrl;
+
+    public function __construct()
+    {
+        $this->apiBaseUrl = 'http://127.0.0.1:8000/api';
+    }
+
     public function index()
     {
-        $categories = Categories::all();
-        return view('administrador.categorias.index', compact('categories'));
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+            ])->get($this->apiBaseUrl.'/categories');
+
+            $statusCode = $response->status();
+
+            if ($statusCode === 200) {
+                $categories = $response->json();
+                //dd($categories);
+                return view('administrador.categorias.index', compact('categories'));
+            } else {
+                return response()->json(['error' => 'Error al obtener las categorías de la API'], $statusCode);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error de conexión con la API'], 500);
+        }
     }
 
     public function create()
@@ -20,81 +45,93 @@ class CategoriesController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'categoryName' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
-
-        $categoria = new Categories([
-            'categoryName' => $request->input('categoryName'),
-            'description' => $request->input('description'),
+        try {
+            $token = $this->getToken();
+            $http = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token
+            ]);
             
-        ]);
-
-        // Guardar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $categoria->image = $imageName;
-        }
-
-        $categoria->save();
-
-        return redirect()->route('categories.index')->with('success', 'Categoria creada exitosamente');
-    }
-
-    public function show(Categories $categoria)
-    {
-        return view('categories.show', compact('categoria'));
-    }
-
-    public function edit(Categories $categoria)
-    {
-        return view('administrador.categorias.edit', compact('categoria'));
-    }
-
-    public function update(Request $request, Categories $categoria)
-    {
-        $request->validate([
-            'categoryName' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
-
-        $categoria->update([
-            'categoryName' => $request->input('categoryName'),
-            'description' => $request->input('description'),
-        ]);
-
-        // Actualizar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-
-            // Eliminar la imagen anterior si existe
-            if ($categoria->image) {
-                unlink(public_path('images/' . $categoria->image));
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $http->attach('image', file_get_contents($image->getRealPath()), $image->getClientOriginalName());
             }
+            
+            $response = $http->post($this->apiBaseUrl.'/categories', $request->except('_token', 'image'));
 
-            $categoria->image = $imageName;
-            $categoria->save();
+            if ($response->successful()) {
+                return redirect()->route('categories.index')->with('success', 'Categoría creada exitosamente');
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Error al crear la categoría: ' . $response->body()]);
+            }
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
         }
-
-        return redirect()->route('categories.index')->with('success', 'Categoria actualizada exitosamente');
     }
 
-    public function destroy(Categories $categoria)
+    public function show($id)
+    {    
+        $token = $this->getToken();
+        $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token
+        ])->get($this->apiBaseUrl.'/categories/'.$id);
+        $category = json_decode($response->body(), true);
+        return view('administrador.categorias.show', compact('category'));
+    }
+
+    public function edit($id)
     {
-        // Eliminar la imagen asociada antes de eliminar la categoría
-        if ($categoria->image) {
-            unlink(public_path('images/' . $categoria->image));
+        $token = $this->getToken();
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '. $token
+        ])->get($this->apiBaseUrl.'/categories/'.$id);
+        
+        $category = json_decode($response->body(), true);
+        //dd($category);
+        return view('administrador.categorias.edit', compact('category'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $token = $this->getToken();
+
+            $http = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token
+            ]);
+            
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $http->attach('image', file_get_contents($image->getRealPath()), $image->getClientOriginalName());
+            }
+            
+            $response = $http->post($this->apiBaseUrl.'/categories/'.$id, $request->except('_token'));
+
+            if ($response->successful()) {
+                return redirect()->route('categories.index')->with('success', 'Categoría actualizada exitosamente');
+            } else {
+                return back()->withInput()->withErrors(['error' => 'Error al actualizar la categoría: ' . $response->body()]);
+            }
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
         }
+    }
 
-        $categoria->delete();
+    public function destroy($id)
+    {
+        $token = $this->getToken();
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '. $token
+        ])->delete($this->apiBaseUrl.'/categories/'.$id);
+        return redirect()->route('categories.index')->with('success', 'Categoría eliminada exitosamente');
+    }
 
-        return redirect()->route('categories.index')->with('success', 'Categoria eliminada exitosamente');
+    private function getToken() {
+        $token = session('auth_token');
+    
+        if ($token) {
+            return $token;
+        } else {
+            return 'Error: Token de autenticación no encontrado en la sesión';
+        }
     }
 }

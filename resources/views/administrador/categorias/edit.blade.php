@@ -9,29 +9,29 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("Editar Categoría: $categoria->categoryname") }}
+                    {{ __("Editar Categoría: " . $category['categoria']['categoryName']) }}
                 </div>
             </div>
 
-            <form method="POST" action="{{ route('categories.update', $categoria) }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('categories.update', $category['categoria']['id']) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PATCH')
 
                 <div class="mb-4">
                     <label for="categoryName" class="block text-sm font-medium text-white">Nombre de la Categoría</label>
-                    <input type="text" name="categoryName" id="categoryName" class="mt-1 p-2 border rounded-md w-full" value="{{ $categoria->categoryName }}" required>
+                    <input type="text" name="categoryName" id="categoryName" class="mt-1 p-2 border rounded-md w-full" value="{{ old('categoryName', $category['categoria']['categoryName']) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="description" class="block text-sm font-medium text-white">Descripción</label>
-                    <input type="text" name="description" id="description" class="mt-1 p-2 border rounded-md w-full" value="{{ $categoria->description }}" required>
+                    <input type="text" name="description" id="description" class="mt-1 p-2 border rounded-md w-full" value="{{ old('description', $category['categoria']['description']) }}" required>
                 </div>
 
-                <!-- Mostrar imagen actual de la marca -->
+                <!-- Mostrar imagen actual de la categoría -->
                 <div class="mb-4">
-                    <label for="image" class="block text-sm font-medium text-white">Imagen actual de la Marca</label>
-                    @if($categoria->image)
-                        <img src="{{ asset('images/' . $categoria->image) }}" alt="{{ $categoria->name }}" class="h-16 w-16 rounded-full object-cover">
+                    <label for="image" class="block text-sm font-medium text-white">Imagen actual de la Categoría</label>
+                    @if($category['categoria']['image'])
+                        <img src="{{ asset('images/' . $category['categoria']['image']) }}" alt="{{ $category['categoria']['categoryName'] }}" class="h-16 w-16 rounded-full object-cover">
                     @else
                         Sin imagen
                     @endif

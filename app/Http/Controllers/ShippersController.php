@@ -5,14 +5,42 @@ namespace App\Http\Controllers;
 use App\Models\Shippers; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Facades\Http;
 
 class ShippersController extends Controller
 {
+
+    protected $apiBaseUrl;
+
+    public function __construct()
+    {
+        // URL base de tu API externa
+        $this->apiBaseUrl = 'http://127.0.0.1:8000/api';
+    }
+
     public function index()
     {
-        $shippers = Shippers::all();
-        return view('administrador.shippers.index', compact('shippers'));
+        try {
+            $token = $this->getToken();
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token,
+ 
+            ])->get($this->apiBaseUrl.'/shippers');
+            $statusCode = $response->status();
+
+            if ($statusCode === 200) {
+                $shippers = $response->json();
+                //dd($shippers);
+                return view('administrador.shippers.index', compact('shippers'));
+            } else {
+                return response()->json(['error' => 'Error al obtener los transportistas de la API'], $statusCode);
+            }
+        } catch (RequestException $e) {
+            return response()->json(['error' => 'Error de conexión con la API'], 500);
+        }
     }
+
 
     public function create()
     {
@@ -20,86 +48,126 @@ class ShippersController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'companyname' => 'required|string|max:255',
-            'phone' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
-
-        $transportista = new Shippers([
-            'companyname' => $request->input('companyname'),
-            'phone' => $request->input('phone'),
-        ]);
-
-        // Procesamiento de la imagen
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $transportista->image = $imageName;
-        }
-
-        $transportista->save();
-
-        return redirect()->route('shippers.index')->with('success', 'Transportista creado exitosamente');
-    }
-
-    public function show(Shippers $transportista)
-    {
-        return view('shippers.show', compact('transportista'));
-    }
-
-    public function edit(Shippers $transportista)
-    {
-        return view('administrador.shippers.edit', compact('transportista'));
-    }
-
-    public function update(Request $request, Shippers $transportista)
 {
-    $request->validate([
-        'companyname' => 'required|string|max:255',
-        'phone' => 'required|string',
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Valida que sea una imagen y tenga un tamaño máximo de 2MB
-    ]);
-
-    // Actualiza los campos de nombre de la empresa y número de teléfono
-    $transportista->companyname = $request->input('companyname');
-    $transportista->phone = $request->input('phone');
-
-    // Procesa la imagen si se proporciona un nuevo archivo de imagen
-    if ($request->hasFile('image')) {
-        // Elimina la imagen anterior si existe
-        if ($transportista->image) {
-            Storage::delete('images/' . $transportista->image);
-        }
-
-        // Almacena el nuevo archivo de imagen
+    try {
+        // Realiza la solicitud HTTP para crear el transportista
+        $token = $this->getToken();
+        
+        $http = Http::withHeaders([
+            'Authorization' => 'Bearer '. $token
+        ]);
+        
+        // Verifica si el archivo de imagen existe
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $transportista->image = $imageName;
+            // Adjunta la imagen a la solicitud si existe
+            $http->attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            );
         }
-
-        // Actualiza el nombre de la imagen en la base de datos
-        $transportista->image = $imageName;
+        
+        $response = $http->post($this->apiBaseUrl.'/shippers', $request->except('_token'));
+        
+        // Verifica si la solicitud fue exitosa
+        if ($response->successful()) {
+            // Redirige a la página de índice de transportistas con un mensaje de éxito
+            return redirect()->route('shippers.index')->with('success', 'Transportista creado exitosamente');
+        } else {
+            // Si la solicitud falla, muestra un mensaje de error con la respuesta del servidor
+            return back()->withInput()->withErrors(['error' => 'Error al crear el transportista: ' . $response->body()]);
+        }
+    } catch (\Exception $e) {
+        // Si se produce una excepción, muestra un mensaje de error genérico
+        return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
     }
-
-    // Guarda los cambios en la base de datos
-    $transportista->save();
-
-    return redirect()->route('shippers.index')->with('success', 'Transportista actualizado exitosamente');
 }
 
-    public function destroy(Shippers $transportista)
+    public function show($id)
     {
-        if ($transportista->image) {
-            unlink(public_path('images/' . $transportista->image));
+        $token = $this->getToken();
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '. $token,
+
+        ])->get($this->apiBaseUrl.'/shippers/'.$id);
+        $shipper = json_decode($response->body(), true);
+        return view('administrador.shippers.show', compact('shipper'));
+    }
+
+    public function edit($id)
+{
+    $token = $this->getToken();
+    $response = Http::withHeaders([
+        'Authorization' => 'Bearer '. $token
+    ])->get($this->apiBaseUrl.'/shippers/'.$id);
+    $shipper = json_decode($response->body(), true);
+
+    // Aquí es donde usas dd() para depurar
+    //dd($shipper);
+
+    return view('administrador.shippers.edit', compact('shipper'));
+}
+
+
+
+    public function update(Request $request, $id)
+{
+    $image = $request->file('image');
+    
+    try {
+        // Realiza la solicitud HTTP para actualizar el transportista
+        $token = $this->getToken();
+        
+        // Inicializa la variable $response sin adjuntar la imagen
+        $http = Http::withHeaders([
+                'Authorization' => 'Bearer '. $token
+        ]);
+        
+        // Verifica si el archivo de imagen existe
+        if ($request->hasFile('image')) {
+            // Adjunta la imagen a la solicitud si existe
+            $http->attach(
+                'image', file_get_contents($image), $image->getClientOriginalName()
+            );
         }
+        
+        $response = $http->post($this->apiBaseUrl.'/shippers/'.$id, $request->except('_token'));
+        
+        // Verifica si la solicitud fue exitosa
+        if ($response->successful()) {
+            // Redirige a la página de índice de transportistas con un mensaje de éxito
+            return redirect()->route('shippers.index')->with('success', 'Transportista actualizado exitosamente');
+        } else {
+            // Si la solicitud falla, muestra un mensaje de error con la respuesta del servidor
+            return back()->withInput()->withErrors(['error' => 'Error al actualizar el transportista: ' . $response->body()]);
+        }
+    } catch (\Exception $e) {
+        // Si se produce una excepción, muestra un mensaje de error genérico
+        return back()->withInput()->withErrors(['error' => 'Se produjo un error al procesar la solicitud: ' . $e->getMessage()]);
+    }
+}
 
-        $transportista->delete();
 
+
+    public function destroy($id)
+    {
+        $token = $this->getToken();
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer '. $token,
+
+        ])->delete($this->apiBaseUrl.'/shippers/'.$id);
         return redirect()->route('shippers.index')->with('success', 'Transportista eliminado exitosamente');
+    }
+
+    private function getToken() {
+        // Obtener el token de la sesión
+        $token = session('auth_token');
+    
+        // Verificar si el token existe en la sesión
+        if ($token) {
+            return $token;
+        } else {
+            // Si el token no está en la sesión, manejar el caso de error
+            return 'Error: Token de autenticación no encontrado en la sesión';
+        }
     }
 }

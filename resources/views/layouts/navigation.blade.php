@@ -7,7 +7,6 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <a href="{{ route('products.index') }}">
-                            <a href="{{ route('brands.index') }}">
                                 <a href="{{ route('shippers.index') }}">
                                     <a href="{{ route('categories.index') }}">
                                         <a href="{{ route('suppliers.index') }}">
@@ -22,10 +21,6 @@
 
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                         {{ __('Productos') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('brands.index')" :active="request()->routeIs('brands.index')">
-                        {{ __('Marcas') }}
                     </x-nav-link>
 
                     <x-nav-link :href="route('shippers.index')" :active="request()->routeIs('shippers.index')">

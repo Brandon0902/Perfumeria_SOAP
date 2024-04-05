@@ -28,28 +28,34 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
-                        @foreach($shippers as $shipper)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if($shipper->image)
-                                    <img src="{{ asset('images/' . $shipper->image) }}" alt="{{ $shipper->name }}" class="h-16 w-16 rounded-full object-cover">
-                                @else
-                                    Sin imagen
-                                @endif
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->companyname }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $shipper->phone }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <a href="{{ route('shippers.edit', $shipper) }}" class="text-blue-600 hover:text-blue-900">Editar</a>
-                                <form action="{{ route('shippers.destroy', $shipper) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                        @endforeach
+                        @if(!empty($shippers['shippers']))
+                            @foreach($shippers['shippers'] as $shipper)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if(isset($shipper['image']))
+                                        <img src="{{ $shipper['image'] }}" alt="{{ $shipper['companyname'] ?? 'N/A' }}" class="h-16 w-16 rounded-full object-cover">
+                                    @else
+                                        Sin imagen
+                                    @endif
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $shipper['id'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $shipper['companyname'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{{ $shipper['phone'] }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <a href="{{ route('shippers.edit', $shipper['id']) }}" class="text-blue-600 hover:text-blue-900">Editar</a>
+                                    <form action="{{ route('shippers.destroy', $shipper['id']) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900 ml-2">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5" class="px-6 py-4 whitespace-nowrap">No hay transportistas disponibles.</td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
