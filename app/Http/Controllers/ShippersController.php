@@ -2,104 +2,151 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shippers; 
+use App\Models\Shippers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\JsonResponse;
 
 class ShippersController extends Controller
 {
-    public function index()
+    public function index(Request $request): JsonResponse
     {
-        $shippers = Shippers::all();
-        return view('administrador.shippers.index', compact('shippers'));
-    }
+        // Verificar si el usuario está autenticado
+        if (!$request->user()) {
+            return response()->json(['error' => 'Debe iniciar sesión para acceder a esta ruta.'], 401);
+        }
 
-    public function create()
-    {
-        return view('administrador.shippers.create');
+        $shippers = Shippers::all();
+        return new JsonResponse(['shippers' => $shippers]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        // Validar los datos recibidos en la solicitud
+        $validator = Validator::make($request->all(), [
             'companyname' => 'required|string|max:255',
             'phone' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'companyname.required' => 'El nombre de la empresa es requerido.',
+            'companyname.string' => 'El nombre de la empresa debe ser una cadena de caracteres.',
+            'companyname.max' => 'El nombre de la empresa no debe exceder los :max caracteres.',
+            'phone.required' => 'El número de teléfono es requerido.',
+            'phone.string' => 'El número de teléfono debe ser una cadena de caracteres.',
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no debe exceder los :max kilobytes de tamaño.',
         ]);
 
-        $transportista = new Shippers([
-            'companyname' => $request->input('companyname'),
-            'phone' => $request->input('phone'),
-        ]);
-
-        // Procesamiento de la imagen
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $transportista->image = $imageName;
+        // Si la validación falla, retorna los errores
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
         }
 
+        // Instancia un nuevo objeto de Transportista (Shippers)
+        $transportista = new Shippers();
+
+        // Asigna los valores recibidos en la solicitud a las propiedades del transportista
+        $transportista->companyname = $request->input('companyname');
+        $transportista->phone = $request->input('phone');
+
+        // Procesamiento de la imagen si se proporciona
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            // Generar un nombre único para la imagen
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Mover la imagen a la carpeta de imágenes
+            $image->move(public_path('images'), $imageName);
+
+            // Construir la URL completa de la imagen
+            $imageUrl = url('images/' . $imageName);
+
+            // Actualizar el campo de imagen en el modelo con la URL
+            $transportista->image = $imageUrl;
+        }
+
+        // Guarda el nuevo transportista en la base de datos
         $transportista->save();
 
-        return redirect()->route('shippers.index')->with('success', 'Transportista creado exitosamente');
+        // Retorna una respuesta JSON indicando que el transportista se creó exitosamente
+        return response()->json(['message' => 'Transportista creado exitosamente'], Response::HTTP_CREATED);
     }
 
-    public function show(Shippers $transportista)
+    public function show($id): JsonResponse
     {
-        return view('shippers.show', compact('transportista'));
+        $shipper = Shippers::find($id);
+        if (!$shipper) {
+            return new JsonResponse(['error' => 'El transportista no existe'], Response::HTTP_NOT_FOUND);
+        }
+        return new JsonResponse(['shipper' => $shipper]);
     }
 
-    public function edit(Shippers $transportista)
+    public function update(Request $request, $id)
     {
-        return view('administrador.shippers.edit', compact('transportista'));
-    }
+        // Encuentra el transportista por su ID
+        $transportista = Shippers::find($id);
 
-    public function update(Request $request, Shippers $transportista)
-{
-    $request->validate([
-        'companyname' => 'required|string|max:255',
-        'phone' => 'required|string',
-        'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Valida que sea una imagen y tenga un tamaño máximo de 2MB
-    ]);
-
-    // Actualiza los campos de nombre de la empresa y número de teléfono
-    $transportista->companyname = $request->input('companyname');
-    $transportista->phone = $request->input('phone');
-
-    // Procesa la imagen si se proporciona un nuevo archivo de imagen
-    if ($request->hasFile('image')) {
-        // Elimina la imagen anterior si existe
-        if ($transportista->image) {
-            Storage::delete('images/' . $transportista->image);
+        // Si no se encuentra el transportista, devuelve un error
+        if (!$transportista) {
+            return response()->json(['error' => 'El transportista no existe'], Response::HTTP_NOT_FOUND);
         }
 
-        // Almacena el nuevo archivo de imagen
+        // Validar los datos recibidos en la solicitud
+        $validator = Validator::make($request->all(), [
+            'companyname' => 'required|string|max:255',
+            'phone' => 'required|string',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'phone.string' => 'El número de teléfono debe ser una cadena de caracteres.',
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no debe exceder los :max kilobytes de tamaño.',
+        ]);
+
+        // Si la validación falla, devuelve los errores
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Procesamiento de la imagen si se proporciona
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+
+            // Generar un nombre único para la imagen
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Mover la imagen a la carpeta de imágenes
             $image->move(public_path('images'), $imageName);
-            $transportista->image = $imageName;
+
+            // Construir la URL completa de la imagen
+            $imageUrl = url('images/' . $imageName);
+
+            // Actualizar el campo de imagen en el modelo con la URL
+            $transportista->image = $imageUrl;
         }
 
-        // Actualiza el nombre de la imagen en la base de datos
-        $transportista->image = $imageName;
+        // Actualiza los datos del transportista con los datos recibidos en la solicitud
+        $transportista->companyname = $request->input('companyname', $transportista->companyname);
+        $transportista->phone = $request->input('phone', $transportista->phone);
+
+        // Guarda los cambios en la base de datos
+        $transportista->save();
+
+        // Devuelve un mensaje de éxito
+        return response()->json(['message' => 'Transportista actualizado exitosamente'], Response::HTTP_OK);
     }
 
-    // Guarda los cambios en la base de datos
-    $transportista->save();
-
-    return redirect()->route('shippers.index')->with('success', 'Transportista actualizado exitosamente');
-}
-
-    public function destroy(Shippers $transportista)
+    public function destroy($id): JsonResponse
     {
-        if ($transportista->image) {
-            unlink(public_path('images/' . $transportista->image));
+        $shipper = Shippers::find($id);
+        if (!$shipper) {
+            return new JsonResponse(['error' => 'El transportista no existe'], Response::HTTP_NOT_FOUND);
         }
 
-        $transportista->delete();
-
-        return redirect()->route('shippers.index')->with('success', 'Transportista eliminado exitosamente');
+        $shipper->delete();
+        return new JsonResponse(['message' => 'Transportista eliminado exitosamente'], Response::HTTP_OK);
     }
 }

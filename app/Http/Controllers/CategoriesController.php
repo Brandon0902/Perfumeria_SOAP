@@ -2,99 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categories; 
+use App\Models\Categories;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class CategoriesController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $categories = Categories::all();
-        return view('administrador.categorias.index', compact('categories'));
+        return response()->json(['categories' => $categories]);
     }
 
-    public function create()
+    public function show($id): JsonResponse
     {
-        return view('administrador.categorias.create');
+        $categoria = Categories::find($id);
+
+        if (!$categoria) {
+            return response()->json(['error' => 'La categoría no existe'], 404);
+        }
+
+        return response()->json(['categoria' => $categoria]);
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'categoryName' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'categoryName.required' => 'El nombre de la categoría es requerido.',
+            'categoryName.string' => 'El nombre de la categoría debe ser una cadena de caracteres.',
+            'categoryName.max' => 'El nombre de la categoría no debe exceder los :max caracteres.',
+            'description.required' => 'La descripción de la categoría es requerida.',
+            'description.string' => 'La descripción de la categoría debe ser una cadena de caracteres.',
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no debe exceder los :max kilobytes de tamaño.',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        }
 
         $categoria = new Categories([
             'categoryName' => $request->input('categoryName'),
             'description' => $request->input('description'),
-            
         ]);
 
-        // Guardar la imagen si se proporciona
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images'), $imageName);
-            $categoria->image = $imageName;
+            $imageUrl = url('images/' . $imageName);
+            $categoria->image = $imageUrl;
         }
 
         $categoria->save();
 
-        return redirect()->route('categories.index')->with('success', 'Categoria creada exitosamente');
+        Log::info("Categoría ID {$categoria->id} creada exitosamente.");
+
+        return response()->json(['message' => 'Categoría creada exitosamente'], Response::HTTP_CREATED);
     }
 
-    public function show(Categories $categoria)
+    public function update(Request $request, $id): JsonResponse
     {
-        return view('categories.show', compact('categoria'));
-    }
+        $categoria = Categories::find($id);
 
-    public function edit(Categories $categoria)
-    {
-        return view('administrador.categorias.edit', compact('categoria'));
-    }
-
-    public function update(Request $request, Categories $categoria)
-    {
-        $request->validate([
-            'categoryName' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validación de la imagen
-        ]);
-
-        $categoria->update([
-            'categoryName' => $request->input('categoryName'),
-            'description' => $request->input('description'),
-        ]);
-
-        // Actualizar la imagen si se proporciona
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-
-            // Eliminar la imagen anterior si existe
-            if ($categoria->image) {
-                unlink(public_path('images/' . $categoria->image));
-            }
-
-            $categoria->image = $imageName;
-            $categoria->save();
+        if (!$categoria) {
+            return response()->json(['error' => 'La categoría no existe'], 404);
         }
 
-        return redirect()->route('categories.index')->with('success', 'Categoria actualizada exitosamente');
+        $validator = Validator::make($request->all(), [
+            'categoryName' => 'required|string|max:255',
+            'description' => 'required|string',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'image.image' => 'El archivo debe ser una imagen.',
+            'image.mimes' => 'La imagen debe ser de tipo jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no debe exceder los :max kilobytes de tamaño.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = uniqid() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $imageUrl = url('images/' . $imageName);
+            $categoria->image = $imageUrl;
+        }
+
+        $categoria->categoryName = $request->input('categoryName', $categoria->categoryName);
+        $categoria->description = $request->input('description', $categoria->description);
+
+        $categoria->save();
+
+        return response()->json(['message' => 'Categoría actualizada exitosamente'], Response::HTTP_OK);
     }
 
-    public function destroy(Categories $categoria)
+    public function destroy($id): JsonResponse
     {
-        // Eliminar la imagen asociada antes de eliminar la categoría
-        if ($categoria->image) {
-            unlink(public_path('images/' . $categoria->image));
+        $categoria = Categories::find($id);
+
+        if (!$categoria) {
+            return response()->json(['error' => 'La categoría no existe'], 404);
         }
 
         $categoria->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Categoria eliminada exitosamente');
+        return response()->json(['message' => 'Categoría eliminada exitosamente'], Response::HTTP_OK);
     }
 }
