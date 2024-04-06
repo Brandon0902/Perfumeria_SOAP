@@ -37,13 +37,20 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
+    public function show(): View
+    {
+        $user = Auth::user();
+
+        return view('perfil', compact('user'));
+    }
+
     /**
      * Delete the user's account.
      */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
+            'password' => ['required', 'current-password'],
         ]);
 
         $user = $request->user();

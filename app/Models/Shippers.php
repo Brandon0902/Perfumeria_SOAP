@@ -10,13 +10,13 @@ class Shippers extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id',
         'companyname',
         'phone',
+        'image',
     ];
 
-    public function products()
+    public function orders()
     {
-        return $this->hasMany(Products::class);
+        return $this->hasMany(Orders::class, 'shipVia');
     }
 }

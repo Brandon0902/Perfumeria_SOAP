@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -21,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'provider',
+        'provider_id',
+        'provider_token',
+        'avatar' // Agregar el campo 'avatar' al arreglo fillable
     ];
 
     /**
@@ -40,12 +46,17 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
-    public function orders(): HasMany
+    public static function generateUserName($username)
     {
-        return $this->hasMany(Orders::class);
-
+        if ($username === null) {
+            $username = Str::lower(Str::random(8));
+        }
+        if (User::where('username', $username)->exists()) {
+            $newUsername = $username . Str::lower(Str::random(3));
+            $username = self::generateUserName($newUsername);
+        }
+        return $username;
     }
 }
